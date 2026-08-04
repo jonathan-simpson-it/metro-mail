@@ -269,7 +269,10 @@ export async function POST(request: Request) {
   if (error) {
     console.error("[send] delivery failed:", error.message);
     return Response.json(
-      { error: "Message could not be delivered. Please try again." },
+      {
+        error: "Message could not be delivered.",
+        details: error.message ?? "Unknown Resend error",
+      },
       { status: 500 },
     );
   }

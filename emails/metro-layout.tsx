@@ -17,21 +17,25 @@ import {
 import { site } from "@/lib/site";
 
 /* ------------------------------------------------------------------ */
-/* MetroMail — JS&C branded email layout                                */
-/* Cream canvas, dark-stamp logo, Georgia wordmark, sage hairlines.     */
-/* Body copy: Inter/Helvetica stack (readable — never Georgia).         */
+/* MetroMail — JS&C branded email layout (v2)                           */
+/* Ink letterhead band mirrors the app header: dark-stamp logo chip,    */
+/* Georgia wordmark, sage hairlines. Body: Inter (readable — never      */
+/* Georgia for paragraphs). Cream canvas so the white card reads as     */
+/* stationery. Every send is instantly recognizable as JS&C.            */
 /* ------------------------------------------------------------------ */
 
 const CREAM = "#f4f4ef";
 const PAPER = "#ffffff";
 const INK = "#161714";
+const INK_BAND = "#121212";
 const MUTED = "#5c5e56";
 const LINE = "#d6d8d1";
 const SAGE = "#80988f";
+const SAGE_TEXT = "#5f7067";
 
 const body: React.CSSProperties = {
   margin: 0,
-  padding: "24px 0",
+  padding: "28px 0",
   backgroundColor: CREAM,
   fontFamily: "'Inter', Helvetica, Arial, sans-serif",
 };
@@ -42,19 +46,30 @@ const container: React.CSSProperties = {
   backgroundColor: PAPER,
   border: `1px solid ${LINE}`,
   borderRadius: 8,
+  overflow: "hidden",
 };
 
-const header: React.CSSProperties = {
-  padding: "28px 32px 22px",
+/* ---------- Ink letterhead header ---------- */
+
+const headerBand: React.CSSProperties = {
+  backgroundColor: INK_BAND,
+  padding: "26px 32px 24px",
+};
+
+const logoChip: React.CSSProperties = {
+  backgroundColor: PAPER,
+  borderRadius: 5,
+  padding: 5,
+  lineHeight: 0,
 };
 
 const wordmark: React.CSSProperties = {
   fontFamily: "Georgia, 'Times New Roman', Times, serif",
   fontSize: 19,
   lineHeight: 1.2,
-  letterSpacing: "2.5px",
+  letterSpacing: "3px",
   textTransform: "uppercase",
-  color: INK,
+  color: "#ffffff",
   margin: 0,
 };
 
@@ -64,14 +79,16 @@ const wordmarkSub: React.CSSProperties = {
   letterSpacing: "2px",
   textTransform: "uppercase",
   color: SAGE,
-  marginTop: 5,
+  marginTop: 6,
   fontFamily: "'Inter', Helvetica, Arial, sans-serif",
 };
 
-const rule: React.CSSProperties = {
-  borderColor: LINE,
-  margin: "0 32px",
+const headerRule: React.CSSProperties = {
+  borderColor: SAGE,
+  margin: 0,
 };
+
+/* ---------- Body ---------- */
 
 const contentSection: React.CSSProperties = {
   padding: "30px 32px 34px",
@@ -84,16 +101,24 @@ const content: React.CSSProperties = {
   fontFamily: "'Inter', Helvetica, Arial, sans-serif",
 };
 
+/* ---------- Footer (cream band inside the card) ---------- */
+
 const footer: React.CSSProperties = {
-  padding: "26px 32px 30px",
+  padding: "28px 32px 32px",
   textAlign: "center" as const,
+  backgroundColor: CREAM,
+};
+
+const footerLogoRow: React.CSSProperties = {
+  textAlign: "center" as const,
+  paddingBottom: 14,
 };
 
 const footerLinks: React.CSSProperties = {
   fontSize: 11,
   letterSpacing: "1.5px",
   textTransform: "uppercase",
-  color: SAGE,
+  color: SAGE_TEXT,
   fontFamily: "'Inter', Helvetica, Arial, sans-serif",
 };
 
@@ -114,13 +139,13 @@ const footerTag: React.CSSProperties = {
 };
 
 const linkStyle: React.CSSProperties = {
-  color: SAGE,
+  color: SAGE_TEXT,
   textDecoration: "none",
 };
 
 const brandLinkStyle: React.CSSProperties = {
-  ...linkStyle,
   color: MUTED,
+  textDecoration: "none",
 };
 
 export function MetroEmailLayout({
@@ -159,16 +184,16 @@ export function MetroEmailLayout({
       <Preview>{previewText}</Preview>
       <Body style={body}>
         <Container style={container}>
-          {/* Header — official dark-stamp logo + serif wordmark */}
-          <Section style={header}>
+          {/* Ink letterhead — logo chip + Georgia wordmark + sage rule */}
+          <Section style={headerBand}>
             <Row>
-              <Column width={64} valign="middle">
+              <Column width={62} valign="middle">
                 <Img
                   src={site.emailLogoUrl}
                   alt={site.name}
-                  width={48}
-                  height={48}
-                  style={{ borderRadius: 4 }}
+                  width={42}
+                  height={42}
+                  style={logoChip}
                 />
               </Column>
               <Column>
@@ -181,8 +206,7 @@ export function MetroEmailLayout({
               </Column>
             </Row>
           </Section>
-
-          <Hr style={rule} />
+          <Hr style={headerRule} />
 
           {/* Body — composed content */}
           <Section style={contentSection}>
@@ -196,10 +220,21 @@ export function MetroEmailLayout({
             )}
           </Section>
 
-          <Hr style={rule} />
+          <Hr style={{ borderColor: LINE, margin: "0 32px" }} />
 
-          {/* Footer — site links + legal */}
+          {/* Footer — logo mark, site links, legal */}
           <Section style={footer}>
+            <Row style={footerLogoRow}>
+              <Column align="center">
+                <Img
+                  src={site.emailLogoUrl}
+                  alt={site.name}
+                  width={30}
+                  height={30}
+                  style={logoChip}
+                />
+              </Column>
+            </Row>
             <Text style={footerLinks}>
               <Link href={site.website} style={linkStyle}>
                 jonathansimpson.co
@@ -214,7 +249,7 @@ export function MetroEmailLayout({
               </Link>
             </Text>
             <Text style={footerMeta}>
-              © {new Date().getFullYear()} {site.name}. All rights reserved.
+              © {new Date().getFullYear()} {site.name.replace(/\.$/, "")}. All rights reserved.
               <br />
               <Link href={site.website} style={brandLinkStyle}>
                 {site.website.replace("https://", "")}

@@ -338,10 +338,15 @@ export function CampaignWorkspace({
       });
       const data = (await res.json().catch(() => null)) as {
         error?: string;
+        details?: string;
         threadId?: string;
       } | null;
       if (!res.ok || data?.error || !data) {
-        setError(data?.error ?? "Message failed to send.");
+        setError(
+          data?.details
+            ? `${data.error ?? "Message failed to send."} (${data.details})`
+            : (data?.error ?? "Message failed to send."),
+        );
         return;
       }
       await patchProspect(selected._id, {
