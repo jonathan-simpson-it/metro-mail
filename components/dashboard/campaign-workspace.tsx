@@ -101,7 +101,7 @@ export function CampaignWorkspace({
       const res = await fetch("/api/send/quota");
       if (res.ok) setQuota((await res.json()) as typeof quota);
     } catch {
-      // Indicator only — the server hard wall still protects the limit.
+      // Indicator only. The server hard wall still protects the limit.
     }
   }, []);
 
@@ -248,7 +248,7 @@ export function CampaignWorkspace({
     const t = templates.find((x) => x._id === templateId);
     if (!t) return;
     const personalized = personalize(t.html, selected);
-    // Insert at the cursor (matches composer behaviour) — never silently
+    // Insert at the cursor (matches composer behaviour), never silently
     // replaces whatever is already in the editor.
     editorRef.current?.insertHtml(highlightTokens(personalized));
     editorRef.current?.focus();
@@ -304,7 +304,7 @@ export function CampaignWorkspace({
           }
         }
       } catch {
-        // Quota unavailable — the server hard wall still protects the limit.
+        // Quota unavailable. The server hard wall still protects the limit.
       }
 
       if (!guardShown) {
@@ -447,7 +447,7 @@ export function CampaignWorkspace({
                 />
                 <textarea
                   className="input !rounded-md !py-1.5 text-sm"
-                  placeholder="Job description / listing — the personalization hook"
+                  placeholder="Job description / listing (the personalisation hook)"
                   rows={2}
                   value={form.listing}
                   onChange={(e) => setForm((f) => ({ ...f, listing: e.target.value }))}
@@ -473,7 +473,7 @@ export function CampaignWorkspace({
 
               <div className="mt-3 border-t border-line pt-3">
                 <label className="field-label" htmlFor="campaign-csv">
-                  Or paste a list (name, company, email, role, listing, notes — simple CSV, no commas inside fields)
+                  Or paste a list (name, company, email, role, listing, notes. Simple CSV, no commas inside fields)
                 </label>
                 <textarea
                   id="campaign-csv"
@@ -502,7 +502,7 @@ export function CampaignWorkspace({
               <div className="px-6 py-10 text-center">
                 <p className="font-serif text-lg text-ink">No prospects yet</p>
                 <p className="mx-auto mt-2 max-w-[26ch] text-xs leading-relaxed text-muted">
-                  Add a prospect or paste a list above, then draft a personalized cold
+                  Add a prospect or paste a list above, then draft a personalised cold
                   email one at a time.
                 </p>
               </div>
@@ -686,7 +686,7 @@ export function CampaignWorkspace({
             <div className="px-6 py-16 text-center">
               <p className="font-serif text-xl text-ink">Select a prospect</p>
               <p className="mx-auto mt-2 max-w-[36ch] text-xs leading-relaxed text-muted">
-                Choose a prospect on the left to draft their personalized email.
+                Choose a prospect on the left to draft their personalised email.
               </p>
             </div>
           )}

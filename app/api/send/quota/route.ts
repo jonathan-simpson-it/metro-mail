@@ -12,12 +12,12 @@ export const dynamic = "force-dynamic";
  * plus the hard daily limit and the cold-outreach ceiling.
  *
  * The queried alias is restricted to the session user's own sender alias
- * (or the shared default) — this is not an address enumeration endpoint.
+ * (or the shared default). This is not an address enumeration endpoint.
  */
 export async function GET(request: Request) {
   const session = await (await getAuth()).api.getSession({ headers: await headers() });
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   const user = session.user as typeof session.user & { fromAlias?: string };

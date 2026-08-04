@@ -3,7 +3,7 @@
  *
  * The true reputation lives inside mailbox providers (Google Postmaster,
  * Microsoft SNDS, Validity Sender Score) and cannot be read programmatically
- * from here — this is an honest estimate from locally verifiable signals,
+ * from here. This is an honest estimate from locally verifiable signals,
  * labelled as such in the UI.
  */
 
@@ -42,7 +42,7 @@ function clamp01(v: number): number {
 export function computeWarmth(input: WarmthInputs): WarmthResult {
   const factors: WarmthFactor[] = [];
 
-  // 1. Authentication records verified (hard gate) — 25 pts
+  // 1. Authentication records verified (hard gate): 25 pts
   const records = input.recordsVerified ? 25 : 0;
   factors.push({
     label: "Authentication records verified",
@@ -50,10 +50,10 @@ export function computeWarmth(input: WarmthInputs): WarmthResult {
     earned: records,
     note: input.recordsVerified
       ? "SPF, DKIM and MX verified by Resend."
-      : "Verify the sending domain in Resend — nothing else matters until this is green.",
+      : "Verify the sending domain in Resend. Nothing else matters until this is green.",
   });
 
-  // 2. Sending history age — 20 pts (only counts once volume exists)
+  // 2. Sending history age: 20 pts (only counts once volume exists)
   const age =
     input.sent30 > 0 ? clamp01(input.historyDays / 60) * 20 : 0;
   factors.push({
@@ -62,15 +62,15 @@ export function computeWarmth(input: WarmthInputs): WarmthResult {
     earned: Math.round(age * 10) / 10,
     note:
       input.sent30 === 0
-        ? "No volume yet — history starts with the first sends."
+        ? "No volume yet. History starts with the first sends."
         : input.historyDays < 14
-          ? "Under 14 days — mailbox providers have little data on you yet."
+          ? "Under 14 days. Mailbox providers have little data on you yet."
           : input.historyDays < 60
             ? "Early history. Keep volume steady and engagement up."
             : "Established history.",
   });
 
-  // 3. Volume consistency (last 14 days) — 15 pts
+  // 3. Volume consistency (last 14 days): 15 pts
   const consistency =
     input.sent30 > 0 ? clamp01(input.activeDays14 / 14) * 15 : 0;
   factors.push({
@@ -83,7 +83,7 @@ export function computeWarmth(input: WarmthInputs): WarmthResult {
         : `${input.activeDays14} of 14 days active. Gaps reset the ramp.`,
   });
 
-  // 4. Bounce rate — 15 pts (no volume yet = no credit)
+  // 4. Bounce rate: 15 pts (no volume yet = no credit)
   const bounceRate = input.sent30 > 0 ? input.bounced30 / input.sent30 : 0;
   const bounce =
     input.sent30 === 0
@@ -101,15 +101,15 @@ export function computeWarmth(input: WarmthInputs): WarmthResult {
     earned: bounce,
     note:
       input.sent30 === 0
-        ? "No sends to measure yet — volume is what builds this."
+        ? "No sends to measure yet. Volume is what builds this."
         : bounceRate <= 0.02
-          ? "Under 2% — healthy."
+          ? "Under 2%. Healthy."
           : bounceRate <= 0.05
-            ? "2–5% — review list quality."
-            : "Above 5% — hard bounces damage reputation fast.",
+            ? "2–5%. Review list quality."
+            : "Above 5%. Hard bounces damage reputation fast.",
   });
 
-  // 5. Complaint rate — 15 pts (no volume yet = no credit)
+  // 5. Complaint rate: 15 pts (no volume yet = no credit)
   const complaintRate = input.sent30 > 0 ? input.complained30 / input.sent30 : 0;
   const complaint =
     input.sent30 === 0
@@ -127,15 +127,15 @@ export function computeWarmth(input: WarmthInputs): WarmthResult {
     earned: complaint,
     note:
       input.sent30 === 0
-        ? "No sends to measure yet — volume is what builds this."
+        ? "No sends to measure yet. Volume is what builds this."
         : complaintRate <= 0.001
           ? "No meaningful complaints."
           : complaintRate <= 0.003
-            ? "0.1–0.3% — worth watching."
-            : "Above 0.3% — spam-reporting hurts reputation fast.",
+            ? "0.1–0.3%. Worth watching."
+            : "Above 0.3%. Spam-reporting hurts reputation fast.",
   });
 
-  // 6. Engagement (unique open rate) — 10 pts
+  // 6. Engagement (unique open rate): 10 pts
   const openRate = input.sent30 > 0 ? input.uniqueOpens30 / input.sent30 : 0;
   const engagement =
     !input.trackingEnabled || input.sent30 === 0
@@ -152,12 +152,12 @@ export function computeWarmth(input: WarmthInputs): WarmthResult {
     weight: 10,
     earned: engagement,
     note: !input.trackingEnabled
-      ? "Open tracking is off on the Resend domain — enable it to see engagement."
+      ? "Open tracking is off on the Resend domain. Enable it to see engagement."
       : input.sent30 === 0
-        ? "No sends to measure yet — opens arrive with the first real volume."
+        ? "No sends to measure yet. Opens arrive with the first real volume."
         : openRate >= 0.3
           ? "Healthy engagement for cold outreach."
-          : "Low opens — cold lists often land here; watch the trend, not the level.",
+          : "Low opens. Cold lists often land here; watch the trend, not the level.",
   });
 
   let score = factors.reduce((s, f) => s + f.earned, 0);
@@ -180,8 +180,8 @@ export function computeWarmth(input: WarmthInputs): WarmthResult {
 /** Recommended daily cold-outreach volume for a warmth state. */
 export const RAMP_BY_STATE: Record<WarmthState, { daily: number; note: string }> = {
   Cold: { daily: 10, note: "Keep it under 10/day while records settle." },
-  Warming: { daily: 30, note: "The cold-outreach ceiling — advance week by week." },
-  Warm: { daily: 40, note: "Steady growth — watch bounce and complaints." },
+  Warming: { daily: 30, note: "The cold-outreach ceiling. Advance week by week." },
+  Warm: { daily: 40, note: "Steady growth. Watch bounce and complaints." },
   Hot: { daily: 50, note: "A comfortably warmed mailbox sustains this." },
 };
 

@@ -36,7 +36,7 @@ function cleanPayload(body: {
 
 export async function GET() {
   const session = await requireSession();
-  if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return Response.json({ error: "Unauthorised" }, { status: 401 });
 
   await connectToDatabase();
   const rules = await RoutingRule.find().sort({ createdAt: 1 }).lean();
@@ -53,7 +53,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const session = await requireSession();
-  if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return Response.json({ error: "Unauthorised" }, { status: 401 });
 
   const body = await request.json().catch(() => null);
   if (!body) return Response.json({ error: "Invalid body" }, { status: 400 });
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   const session = await requireSession();
-  if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return Response.json({ error: "Unauthorised" }, { status: 401 });
 
   const body = await request.json().catch(() => null);
   if (!body?.id) return Response.json({ error: "Rule id required" }, { status: 400 });
@@ -119,7 +119,7 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   const session = await requireSession();
-  if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) return Response.json({ error: "Unauthorised" }, { status: 401 });
 
   const body = await request.json().catch(() => null);
   if (!body?.id) return Response.json({ error: "Rule id required" }, { status: 400 });

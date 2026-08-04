@@ -2,7 +2,7 @@ import { connectToDatabase } from "@/lib/mongoose";
 import { Template, type ITemplate } from "@/models/Template";
 
 /**
- * Cold-email starter pack — content follows the cold-email skill playbook
+ * Cold-email starter pack - content follows the cold-email skill playbook
  * (observation → problem → value → proof → low-friction ask) and the WYND
  * outreach example. Tokens like {{Company}} are replaced per-prospect in
  * the Campaign workspace; MetroEmailLayout adds the logo + site footer
@@ -13,7 +13,7 @@ const SEED_TEMPLATES: Omit<ITemplate, "createdAt" | "updatedAt">[] = [
     name: "Cold Outreach",
     slug: "cold-outreach",
     description:
-      "Personalized first touch: observation, problem, value, proof, one low-friction ask.",
+      "Personalised first touch: observation, problem, value, proof, one low-friction ask.",
     category: "cold-outreach",
     order: 10,
     tokens: [
@@ -34,7 +34,7 @@ const SEED_TEMPLATES: Omit<ITemplate, "createdAt" | "updatedAt">[] = [
       "<p>Our software architectures directly automate the core accounting and administrative responsibilities outlined in your listing, providing powerful tools to assist your operational team:</p>",
       "<ul><li><strong>Automated Xero Invoicing &amp; Membership Billings:</strong> Custom API pipelines that sync member sign-ups, plan renewals, and add-on services directly with Xero, auto-generating recurring invoices and payment reminders.</li><li><strong>Bank &amp; Account Reconciliation AI Tools:</strong> Automated tools that match incoming bank payments against open invoices in Xero, flagging discrepancies instantly and eliminating manual spreadsheet tracking.</li><li><strong>Automated Financial Reporting &amp; Dashboard:</strong> Instant compilation of monthly revenue, membership churn, and outstanding AR reports without manual data compilation.</li></ul>",
       "<h2>Data Privacy &amp; Zero Data Retention (ZDR) Compliance</h2>",
-      "<p>Handling member billing records, payment details, and Xero accounting ledgers requires strict privacy protection. {{FounderName}} engineers all our systems under strict Zero Data Retention (ZDR) protocols and Hong Kong Personal Data (Privacy) Ordinance (PDPO) standards — your records are never saved, stored, or used for model training.</p>",
+      "<p>Handling member billing records, payment details, and Xero accounting ledgers requires strict privacy protection. {{FounderName}} engineers all our systems under strict Zero Data Retention (ZDR) protocols and Hong Kong Personal Data (Privacy) Ordinance (PDPO) standards. Your records are never saved, stored, or used for model training.</p>",
       "<h2>Why Partner with jonathansimpson.co?</h2>",
       "<ul><li><strong>Zero Onboarding &amp; 24/7 Accuracy:</strong> Eliminate shift constraints and supervisor overhead while obtaining 24/7 automated billing and reconciliation.</li><li><strong>Seamless Xero Integration:</strong> Built directly around {{Company}}’s existing Xero setup and membership workflow.</li><li><strong>Concrete ROI Analysis:</strong> Calculations showing how automated pipelines execute 24/7 at a fraction of part-time hiring and supervisory costs.</li></ul>",
       "<p>To see how we design custom AI pipelines aligned with SFC, HKMA, and PDPC / PDPO compliance frameworks, visit our dedicated automation portal at <a href=\"https://automation.jonathansimpson.co/\">automation.jonathansimpson.co</a>.</p>",
@@ -52,7 +52,7 @@ const SEED_TEMPLATES: Omit<ITemplate, "createdAt" | "updatedAt">[] = [
     tokens: ["ContactName", "Company", "FounderName"],
     html: [
       "<p>Hi {{ContactName}},</p>",
-      "<p>I wrote last week about automating {{Company}}’s billing and reconciliation — thought it might have slipped through the inbox.</p>",
+      "<p>I wrote last week about automating {{Company}}’s billing and reconciliation. Thought it might have slipped through the inbox.</p>",
       "<p>One thing I didn’t mention: the setup is built around your existing Xero workflows, so there is no migration and no new tool for your team to learn.</p>",
       "<p>Worth a look? A 10-minute screen share is enough to see if it fits.</p>",
       "<p>Best,<br/>{{FounderName}}<br/>jonathansimpson.co</p>",
@@ -62,13 +62,13 @@ const SEED_TEMPLATES: Omit<ITemplate, "createdAt" | "updatedAt">[] = [
     name: "Breakup / Last Touch",
     slug: "breakup",
     description:
-      "The final touch in a sequence — honors the reader's time, leaves the door open once.",
+      "The final touch in a sequence. It honours the reader's time and leaves the door open once.",
     category: "follow-up",
     order: 30,
     tokens: ["ContactName", "Company", "FounderName"],
     html: [
       "<p>Hi {{ContactName}},</p>",
-      "<p>I’ll keep this short — if {{Company}}’s accounting workload is under control, no need to reply. This is my last note on it.</p>",
+      "<p>I’ll keep this short. If {{Company}}’s accounting workload is under control, no need to reply. This is my last note on it.</p>",
       "<p>If it ever isn’t, the automation portal is at <a href=\"https://automation.jonathansimpson.co/\">automation.jonathansimpson.co</a>, and we are one reply away.</p>",
       "<p>All the best,<br/>{{FounderName}}</p>",
     ].join(""),
@@ -85,7 +85,7 @@ const SEED_TEMPLATES: Omit<ITemplate, "createdAt" | "updatedAt">[] = [
       "<p>Dear {{ContactName}},</p>",
       "<p>Thank you for the conversation about {{Company}}. Following up with the proposal outline we discussed:</p>",
       "<ul><li><strong>Scope:</strong> {{ValueLine}}</li><li><strong>Timeline:</strong> 4–6 weeks from kickoff to the first automated workflow live.</li><li><strong>Next step:</strong> A 15-minute call to confirm the exact workflows and agree the rollout plan.</li></ul>",
-      "<p>Full background — including real-world use cases and ROI analysis — is on our main site at <a href=\"https://jonathansimpson.co/\">jonathansimpson.co</a>.</p>",
+      "<p>Full background, including real-world use cases and ROI analysis, is on our main site at <a href=\"https://jonathansimpson.co/\">jonathansimpson.co</a>.</p>",
       "<p>Best regards,<br/>{{FounderName}} &amp; {{CoFounderName}}<br/>Co-Founders, jonathansimpson.co</p>",
     ].join(""),
   },
@@ -100,7 +100,7 @@ const SEED_TEMPLATES: Omit<ITemplate, "createdAt" | "updatedAt">[] = [
   },
 ];
 
-/** Idempotent seed — upserts by slug, never duplicates. E11000 from a
+/** Idempotent seed. Upserts by slug, never duplicates. E11000 from a
  * concurrent seed is treated as success (same slug, same content). */
 export async function seedTemplates(): Promise<void> {
   await connectToDatabase();

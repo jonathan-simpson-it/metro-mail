@@ -39,7 +39,7 @@ const EXTERNAL_CHECKS = [
 ];
 
 function pct(value: number | null): string {
-  return value === null ? "—" : `${(value * 100).toFixed(1)}%`;
+  return value === null ? "N/A" : `${(value * 100).toFixed(1)}%`;
 }
 
 function formatDate(d: Date): string {
@@ -108,7 +108,7 @@ export default async function DeliverabilityPage() {
           </div>
           <p className="mt-1 text-xs leading-relaxed text-muted">
             Estimated 0–100 from locally verifiable signals. The true score
-            lives with Google, Microsoft and Validity — see External checks.
+            lives with Google, Microsoft and Validity. See External checks.
           </p>
           <div className="mt-4">
             <div className="flex items-baseline justify-between">
@@ -155,7 +155,7 @@ export default async function DeliverabilityPage() {
                 ) : null}
                 {!trackingEnabled ? (
                   <span className="text-[0.68rem] text-muted">
-                    Tracking off — open/click stats unavailable. Enable it in
+                    Tracking off. Open/click stats unavailable. Enable it in
                     Resend (domain settings).
                   </span>
                 ) : null}
@@ -171,7 +171,7 @@ export default async function DeliverabilityPage() {
                         {r.type || "record"}
                       </p>
                       <p className="truncate font-mono text-[0.62rem] text-muted">
-                        {r.name || "—"}
+                        {r.name || "N/A"}
                       </p>
                     </div>
                     <span
@@ -204,8 +204,8 @@ export default async function DeliverabilityPage() {
             <StatRow label="Delivered" value={String(stats.delivered30)} />
             <StatRow label="Bounce rate" value={pct(stats.bounceRate)} note="target <2%" />
             <StatRow label="Complaint rate" value={pct(stats.complaintRate)} note="target <0.1%" />
-            <StatRow label="Unique open rate" value={trackingEnabled ? pct(stats.openRate) : "—"} note="target 50%+" />
-            <StatRow label="Unique click rate" value={trackingEnabled ? pct(stats.clickRate) : "—"} />
+            <StatRow label="Unique open rate" value={trackingEnabled ? pct(stats.openRate) : "N/A"} note="target 50%+" />
+            <StatRow label="Unique click rate" value={trackingEnabled ? pct(stats.clickRate) : "N/A"} />
             <StatRow label="Reply rate" value={pct(stats.replyRate)} note="cold: 1–5%" />
             <StatRow label="Replies received" value={String(stats.replies30)} />
           </div>
@@ -285,8 +285,8 @@ export default async function DeliverabilityPage() {
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   Mail flows from mail.jonathansimpson.co, not the root domain.
                   If cold outreach ever damages the subdomain&apos;s reputation, the
-                  root domain — your website, transactional mail, client
-                  correspondence — stays clean. This isolation is the standard
+                  root domain (your website, transactional mail, client
+                  correspondence) stays clean. This isolation is the standard
                   cold-email architecture.
                 </p>
               </details>
@@ -298,8 +298,8 @@ export default async function DeliverabilityPage() {
                   Providers build reputation from history: a brand-new identity
                   that suddenly sends 200 emails a day looks automated and gets
                   throttled. Warming is a gradual volume ramp (see the schedule)
-                  plus positive signals — opens, replies, no bounces, no spam
-                  complaints — over roughly 4–6 weeks. It cannot be rushed, and
+                  plus positive signals (opens, replies, no bounces, no spam
+                  complaints) over roughly 4–6 weeks. It cannot be rushed, and
                   stopping for weeks resets part of the progress.
                 </p>
               </details>
@@ -317,7 +317,7 @@ export default async function DeliverabilityPage() {
             </div>
             <div>
               <p className="mb-2 text-[0.7rem] uppercase tracking-[0.08em] text-muted">
-                External checks — run these to see your real scores
+                External checks: run these to see your real scores
               </p>
               <div className="flex flex-col gap-1.5">
                 {EXTERNAL_CHECKS.map((c) => (
@@ -348,7 +348,7 @@ export default async function DeliverabilityPage() {
           <h2 className="font-serif text-lg text-ink">Recent delivery events</h2>
           {recentEvents.length === 0 ? (
             <p className="mt-3 text-sm text-muted">
-              No delivery events yet. They appear as Resend webhooks fire — the
+              No delivery events yet. They appear as Resend webhooks fire. The
               same Svix-verified endpoint that handles inbound mail.
             </p>
           ) : (
@@ -367,7 +367,7 @@ export default async function DeliverabilityPage() {
                     </span>
                   </span>
                   <span className="min-w-0 flex-1 truncate text-xs text-ink">
-                    {e.subject ?? e.url ?? "—"}
+                    {e.subject ?? e.url ?? "N/A"}
                   </span>
                 </div>
               ))}

@@ -20,7 +20,7 @@ const TRACKED_TYPES: EmailEventType[] = [
 ];
 
 /**
- * Resend webhook — inbound (`email.received`) plus delivery analytics
+ * Resend webhook: inbound (`email.received`) plus delivery analytics
  * (`email.sent/delivered/bounced/opened/clicked/complained/delivery_delayed`).
  * Svix-signed (svix-id / svix-timestamp / svix-signature headers), verified
  * against the raw request body before any processing. Event persistence is
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // Delivery analytics — persist idempotently. Resend events have no own id;
+  // Delivery analytics. Persist idempotently. Resend events have no own id;
   // the Svix delivery id is unique per webhook attempt and covers retries.
   const type = event.type.replace("email.", "") as EmailEventType;
   const data = event.data as {
@@ -100,7 +100,7 @@ export async function POST(request: Request) {
     return Response.json({ ok: true });
   } catch (err) {
     if ((err as { code?: number }).code === 11000) {
-      // Duplicate event delivery — already recorded.
+      // Duplicate event delivery. Already recorded.
       return Response.json({ ok: true, duplicate: true });
     }
     // Transient failure (DB down etc.): return 500 so Svix retries.

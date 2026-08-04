@@ -1,7 +1,7 @@
 import { site } from "@/lib/site";
 
 /**
- * Personalization for cold outreach — one custom email per prospect,
+ * Personalisation for cold outreach. One custom email per prospect,
  * matched to their job description. Maps prospect fields onto template
  * tokens; tokens with no value are left in place so the composer highlights
  * them as unresolved chips and blocks the send until they are filled.
@@ -53,7 +53,7 @@ export function personalize(html: string, p: ProspectFields): string {
  * consumer (ProseMirror whitelists attributes anyway).
  */
 export function highlightTokens(html: string): string {
-  // NULs would collide with the attribute-protection sentinel — strip first.
+  // NULs would collide with the attribute-protection sentinel. Strip first.
   const cleaned = html.replace(/\u0000/g, "");
   const attrValues: string[] = [];
   const protectedHtml = cleaned.replace(

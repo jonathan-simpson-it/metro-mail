@@ -46,7 +46,7 @@ interface SendBody {
 export async function POST(request: Request) {
   const session = await (await getAuth()).api.getSession({ headers: await headers() });
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   let body: SendBody;
@@ -195,7 +195,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // --- Render branded template (content sanitized server-side first)
+  // --- Render branded template (content sanitised server-side first)
   const safeHtml = sanitizeHtml(html, {
     allowedTags: [
       "p", "br", "b", "strong", "i", "em", "u", "s", "strike", "a", "ul", "ol",
@@ -225,7 +225,7 @@ export async function POST(request: Request) {
     },
   });
 
-  // Defense-in-depth: never ship raw template tokens to recipients.
+  // Defence-in-depth: never ship raw template tokens to recipients.
   if (hasUnresolvedTokens(safeHtml)) {
     return Response.json(
       { error: "Template tokens remain unreplaced ({{…}}). Replace or remove them before sending." },
@@ -235,7 +235,7 @@ export async function POST(request: Request) {
 
   if (!safeHtml.trim()) {
     return Response.json(
-      { error: "The message body is empty after sanitization. Write some content." },
+      { error: "The message body is empty after sanitisation. Write some content." },
       { status: 400 },
     );
   }

@@ -139,8 +139,8 @@ export async function getDeliverabilityData(): Promise<DeliverabilityData> {
   const avgDay =
     dailyCounts.length > 0 ? dailyCounts.reduce((s, c) => s + c, 0) / dailyCounts.length : 0;
 
-  // Resend's own verdict on the domain is the authoritative record gate —
-  // its records list covers SPF/DKIM/MX but not DMARC, so per-record checks
+  // Resend's own verdict on the domain is the authoritative record gate.
+  // Its records list covers SPF/DKIM/MX but not DMARC, so per-record checks
   // would be misleading.
   const recordsVerified = domain?.status === "verified";
   const trackingEnabled = domain ? domain.openTracking || domain.clickTracking : false;

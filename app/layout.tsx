@@ -16,8 +16,8 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: `${site.productName} — ${site.name}`,
-    template: `%s — ${site.productName}`,
+    default: `${site.productName} · ${site.name}`,
+    template: `%s · ${site.productName}`,
   },
   description:
     "Internal corporate communications platform for Jonathan Simpson & Co. Inbound routing, thread visualization, and high-performance outbound delivery.",

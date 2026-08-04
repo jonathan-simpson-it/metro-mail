@@ -2,12 +2,12 @@
 
 @theme inline {
   /* JS&C DESIGN.md tokens */
-  --color-cream: #f4f4ef; /* page background — warm cream */
+  --color-cream: #f4f4ef; /* page background: warm cream */
   --color-paper: #ffffff; /* card, panel, elevated surfaces */
-  --color-ink: #161714; /* primary text — near-black */
-  --color-muted: #5c5e56; /* secondary text — olive-gray */
+  --color-ink: #161714; /* primary text: near-black */
+  --color-muted: #5c5e56; /* secondary text: olive-gray */
   --color-line: #d6d8d1; /* borders, dividers, hr */
-  --color-sage: #80988f; /* sage green — the only accent */
+  --color-sage: #80988f; /* sage green: the only accent */
   --color-sage-soft: #e3e9e6; /* soft sage for chip backgrounds */
   --color-sage-text: #5f7067; /* WCAG AA text sage (4.76:1 on cream, 5.25:1 on white) */
 
@@ -33,11 +33,11 @@
   --color-accent: var(--color-sage);
   --color-accent-soft: var(--color-sage-soft);
 
-  /* Motion — purposeful, fast (DESIGN.md). No decorative animation. */
+  /* Motion: purposeful, fast (DESIGN.md). No decorative animation. */
   --ease-out-quart: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
-  /* Z-index scale — never arbitrary values */
+  /* Z-index scale: never arbitrary values */
   --z-dropdown-backdrop: 29;
   --z-dropdown: 30;
   --z-sticky: 40;
@@ -63,7 +63,7 @@ body {
   color: var(--color-ink);
 }
 
-/* Focus visibility — accessibility standard per DESIGN.md §14 */
+/* Focus visibility: accessibility standard per DESIGN.md §14 */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
@@ -212,7 +212,7 @@ body {
   color: var(--color-ink);
 }
 
-/* Skip-to-content link — hidden until keyboard focus (DESIGN.md §14) */
+/* Skip-to-content link: hidden until keyboard focus (DESIGN.md §14) */
 .skip-link {
   position: fixed;
   top: -100%;
@@ -385,7 +385,7 @@ body {
   background: var(--color-line);
 }
 
-/* Segmented control (WYSIWYG / HTML) — sliding pill */
+/* Segmented control (WYSIWYG / HTML): sliding pill */
 .seg {
   position: relative;
   display: inline-flex;
@@ -456,7 +456,7 @@ body {
   }
 }
 
-/* Unresolved template tokens — pale yellow so nothing ships raw */
+/* Unresolved template tokens: pale yellow so nothing ships raw */
 .tpl-token {
   background: #fbf3db;
   color: #956400;

@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import DOMPurify from "dompurify";
 import { ThreadListItem, ReaderMessage } from "@/components/dashboard/thread-list";
+import { ReplyDialog } from "@/components/dashboard/reply-dialog";
 import { displayName, formatFullDate, formatRelativeTime, initials } from "@/lib/format";
 import { site } from "@/lib/site";
 
 /* ------------------------------------------------------------------ */
-/* Sanitized iframe document — brand base styles applied to raw HTML    */
+/* Sanitised iframe document. Brand base styles applied to raw HTML    */
 /* ------------------------------------------------------------------ */
 
 function buildSanitizedDocument(rawHtml: string): string {
@@ -37,11 +37,8 @@ function buildSanitizedDocument(rawHtml: string): string {
     color: #161714;
     background: #ffffff;
     margin: 0;
-    padding: 0;
+    padding: 1rem 1.25rem;
     overflow-wrap: break-word;
-    max-width: 44rem;
-    margin: 0 auto;
-    padding: 0 1rem;
   }
   a { color: #5f7067; }
   img { max-width: 100%; height: auto; }
@@ -111,7 +108,7 @@ function MessageCard({ message }: { message: ReaderMessage }) {
         </time>
       </header>
 
-      {/* Sanitized body */}
+      {/* Sanitised body */}
       <div className="px-5 py-3">
         <iframe
           ref={iframeRef}
@@ -135,7 +132,7 @@ function MessageCard({ message }: { message: ReaderMessage }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Attachment chips — inbound links fetched lazily via API             */
+/* Attachment chips. Inbound links fetched lazily via API             */
 /* ------------------------------------------------------------------ */
 
 function AttachmentChips({ message }: { message: ReaderMessage }) {
@@ -191,105 +188,6 @@ function AttachmentChips({ message }: { message: ReaderMessage }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Reply box                                                           */
-/* ------------------------------------------------------------------ */
-
-function ReplyBox({
-  thread,
-  userEmail,
-  lastMessageId,
-}: {
-  thread: ThreadListItem;
-  userEmail: string;
-  lastMessageId: string | null;
-}) {
-  const router = useRouter();
-  const [body, setBody] = useState("");
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [sent, setSent] = useState(false);
-
-  async function sendReply(e: React.FormEvent) {
-    e.preventDefault();
-    const text = body.trim();
-    if (!text || sending) return;
-
-    setSending(true);
-    setError(null);
-    setSent(false);
-
-    const html = text
-      .split(/\n{2,}/)
-      .map(
-        (p) =>
-          `<p>${p.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`,
-      )
-      .join("\n");
-
-    // Never reply to our own aliases — that would echo back through the
-    // inbound webhook and duplicate the message in the thread.
-    const recipients = thread.participants.filter(
-      (p) =>
-        p.toLowerCase() !== userEmail.toLowerCase() &&
-        !p.toLowerCase().endsWith(`@${site.mailDomain}`),
-    );
-
-    const res = await fetch("/api/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: recipients,
-        subject: /^re:/i.test(thread.subject) ? thread.subject : `Re: ${thread.subject}`,
-        html,
-        text,
-        threadId: thread.id,
-        inReplyToMessageId: lastMessageId ?? undefined,
-      }),
-    });
-
-    const data = (await res.json().catch(() => null)) as { error?: string } | null;
-    setSending(false);
-
-    if (!res.ok || data?.error) {
-      setError(data?.error ?? "Reply failed to send.");
-      return;
-    }
-
-    setBody("");
-    setSent(true);
-    router.refresh();
-    setTimeout(() => setSent(false), 4000);
-  }
-
-  return (
-    <form onSubmit={sendReply} className="border-t border-line bg-paper p-5">
-      <div className="mb-2 flex items-center justify-between gap-3">
-        <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em] text-muted">
-          Reply as <span className="text-sage-text">{userEmail}</span>
-        </p>
-        <span className="min-w-0 truncate font-mono text-[0.72rem] text-muted">
-          Re: {thread.subject}
-        </span>
-      </div>
-      <textarea
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        rows={4}
-        placeholder="Write your reply…"
-        className="input !rounded-md text-sm"
-      />
-      <div className="mt-3 flex items-center gap-3">
-        <button type="submit" className="btn btn--solid btn--small" disabled={sending || !body.trim()}>
-          {sending ? "Sending…" : "Send reply"}
-        </button>
-        {error ? <p className="text-xs text-ink">{error}</p> : null}
-        {sent ? <p className="font-mono text-[0.72rem] tracking-[0.1em] text-sage-text">DELIVERED</p> : null}
-      </div>
-    </form>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Thread reader                                                       */
 /* ------------------------------------------------------------------ */
 
@@ -302,17 +200,33 @@ export function ThreadReader({
   messages: ReaderMessage[];
   userEmail: string;
 }) {
+  const [replyOpen, setReplyOpen] = useState(false);
   const lastMessageId = messages.length > 0 ? messages[messages.length - 1].id : null;
+
+  const replyDisabled =
+    thread.participants.filter(
+      (p) =>
+        p.toLowerCase() !== userEmail.toLowerCase() &&
+        !p.toLowerCase().endsWith(`@${site.mailDomain}`),
+    ).length === 0;
 
   return (
     <div className="flex h-full flex-col overflow-y-auto">
       <div className="flex items-center gap-3 border-b border-line px-5 py-4">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h1 className="truncate font-serif text-lg text-ink">{thread.subject}</h1>
           <p className="mt-0.5 font-mono text-[0.72rem] tracking-[0.05em] text-muted">
             {messages.length} MESSAGES · {thread.participants.length} PARTICIPANTS
           </p>
         </div>
+        <button
+          type="button"
+          className="btn btn--solid btn--small shrink-0"
+          disabled={replyDisabled}
+          onClick={() => setReplyOpen(true)}
+        >
+          Reply
+        </button>
       </div>
 
       <div className="flex-1 bg-cream">
@@ -321,7 +235,13 @@ export function ThreadReader({
         ))}
       </div>
 
-      <ReplyBox thread={thread} userEmail={userEmail} lastMessageId={lastMessageId} />
+      <ReplyDialog
+        open={replyOpen}
+        thread={thread}
+        userEmail={userEmail}
+        lastMessageId={lastMessageId}
+        onClose={() => setReplyOpen(false)}
+      />
     </div>
   );
 }

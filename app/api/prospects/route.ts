@@ -81,7 +81,7 @@ function validateInput(body: ProspectInput): {
 export async function GET() {
   const session = await requireSession();
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   await connectToDatabase();
@@ -92,7 +92,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const session = await requireSession();
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   let body: unknown;
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
   const skipped: { email?: string; reason: string }[] = [];
 
   // Single prospect, or a batch of them. Batch imports use bulkWrite with
-  // upserts keyed on the (unique) email — race-safe and one round trip.
+  // upserts keyed on the (unique) email. Race-safe and one round trip.
   if (rows.length === 1) {
     const row = rows[0];
     if (!row || typeof row !== "object") {
@@ -174,7 +174,7 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   const session = await requireSession();
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   let body: { id?: string; status?: string; sentAt?: string; threadId?: string } & ProspectInput;
@@ -254,7 +254,7 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
   const session = await requireSession();
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   const id = new URL(request.url).searchParams.get("id");

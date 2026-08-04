@@ -24,7 +24,7 @@ async function requireSession() {
 export async function GET() {
   const session = await requireSession();
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   await connectToDatabase();
@@ -42,7 +42,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const session = await requireSession();
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   let body: TemplateBody;
@@ -119,7 +119,7 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   const session = await requireSession();
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   const id = new URL(request.url).searchParams.get("id");

@@ -18,7 +18,7 @@ export const site = {
   coFounderName: "Lewis Simpson",
   /** Ink-on-transparent logo variant for light UI surfaces. */
   brandLogoInk: "/brand/jsc-mark-ink.svg",
-  /** Fully-qualified email logo URL — email clients cannot resolve relative paths. */
+  /** Fully-qualified email logo URL. Email clients cannot resolve relative paths. */
   emailLogoUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/brand/JSC-logo.png`,
 } as const;
 
@@ -27,7 +27,7 @@ if (
   !process.env.NEXT_PUBLIC_APP_URL
 ) {
   throw new Error(
-    "NEXT_PUBLIC_APP_URL must be set in production — outbound emails embed it for the logo and links.",
+    "NEXT_PUBLIC_APP_URL must be set in production. Outbound emails embed it for the logo and links.",
   );
 }
 
@@ -42,7 +42,7 @@ export function formatSenderAddress(
   return `${local}@${domain}`;
 }
 
-/** Sanitizes user-supplied display names for use in the From header. */
+/** Sanitises user-supplied display names for use in the From header. */
 export function sanitizeFromName(name: string): string {
   return name
     .replace(/[\r\n\0"<>]/g, "")
@@ -58,7 +58,7 @@ export function isValidAlias(alias: string): boolean {
 
 /**
  * Single source of truth for resolving a user-supplied From alias.
- * Valid aliases are normalized to lowercase; anything else falls back.
+ * Valid aliases are normalised to lowercase; anything else falls back.
  * Both /api/send (hard wall) and /api/send/quota (guard) must use this
  * so the mailbox being counted is always the mailbox that would send.
  */

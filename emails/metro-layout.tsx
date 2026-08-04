@@ -17,9 +17,9 @@ import {
 import { site } from "@/lib/site";
 
 /* ------------------------------------------------------------------ */
-/* MetroMail — JS&C branded email layout (v2)                           */
+/* MetroMail - JS&C branded email layout (v2)                           */
 /* Ink letterhead band mirrors the app header: dark-stamp logo chip,    */
-/* Georgia wordmark, sage hairlines. Body: Inter (readable — never      */
+/* Georgia wordmark, sage hairlines. Body: Inter (readable - never      */
 /* Georgia for paragraphs). Cream canvas so the white card reads as     */
 /* stationery. Every send is instantly recognizable as JS&C.            */
 /* ------------------------------------------------------------------ */
@@ -57,9 +57,18 @@ const headerBand: React.CSSProperties = {
 };
 
 const logoChip: React.CSSProperties = {
+  backgroundColor: "rgba(255, 255, 255, 0.12)",
+  border: "1px solid rgba(255, 255, 255, 0.18)",
+  borderRadius: 3,
+  padding: 3,
+  lineHeight: 0,
+};
+
+const footerLogoChip: React.CSSProperties = {
   backgroundColor: PAPER,
-  borderRadius: 5,
-  padding: 5,
+  border: `1px solid ${LINE}`,
+  borderRadius: 3,
+  padding: 3,
   lineHeight: 0,
 };
 
@@ -184,15 +193,15 @@ export function MetroEmailLayout({
       <Preview>{previewText}</Preview>
       <Body style={body}>
         <Container style={container}>
-          {/* Ink letterhead — logo chip + Georgia wordmark + sage rule */}
+          {/* Ink letterhead: logo chip + Georgia wordmark + sage rule */}
           <Section style={headerBand}>
             <Row>
               <Column width={62} valign="middle">
                 <Img
                   src={site.emailLogoUrl}
                   alt={site.name}
-                  width={42}
-                  height={42}
+                  width={36}
+                  height={36}
                   style={logoChip}
                 />
               </Column>
@@ -201,14 +210,14 @@ export function MetroEmailLayout({
                   {site.name}
                 </Heading>
                 <Text style={wordmarkSub}>
-                  {site.productName} · Corporate Communications
+                  {site.productName} · Automation Systems &amp; Internal Tools
                 </Text>
               </Column>
             </Row>
           </Section>
           <Hr style={headerRule} />
 
-          {/* Body — composed content */}
+          {/* Body: composed content */}
           <Section style={contentSection}>
             {contentHtml ? (
               <div
@@ -222,16 +231,16 @@ export function MetroEmailLayout({
 
           <Hr style={{ borderColor: LINE, margin: "0 32px" }} />
 
-          {/* Footer — logo mark, site links, legal */}
+          {/* Footer: logo mark, site links, legal */}
           <Section style={footer}>
             <Row style={footerLogoRow}>
               <Column align="center">
                 <Img
                   src={site.emailLogoUrl}
                   alt={site.name}
-                  width={30}
-                  height={30}
-                  style={logoChip}
+                  width={26}
+                  height={26}
+                  style={footerLogoChip}
                 />
               </Column>
             </Row>

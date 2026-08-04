@@ -15,7 +15,7 @@
 - **Database & ODM:** MongoDB via Mongoose (storing users, sessions, email threads, message fragments, and metadata logs).
 - **Authentication:** Better Auth (handling secure cookie-based credential sessions).
 - **Email Infrastructure:** Resend Node.js SDK (`resend`), configured with sending domain `mail.jonathansimpson.co` and inbound webhooks for receiving.
-- **Styling & Design Engine:** Tailwind CSS adhering strictly to the agency’s `design.md` specs (high-contrast geometry, sharp borders, bold uppercase typography, solid color blocks).
+- **Styling & Design Engine:** Tailwind CSS adhering strictly to the agency’s `design.md` specs (high-contrast geometry, sharp borders, bold uppercase typography, solid colour blocks).
 
 ---
 
@@ -23,7 +23,7 @@
 
 ### Module A: Authentication & Landing
 
-- **Landing Page:** Minimalist single-view entry point featuring the authentication wall (`/login` & `/signup`) styled with Metro design constraints. No public marketing bloat—straight to utility.
+- **Landing Page:** Minimalist single-view entry point featuring the authentication wall (`/login` & `/signup`) styled with Metro design constraints. No public marketing bloat; straight to utility.
 - **Better Auth Integration:** Session-secured API endpoints protecting all dashboard and mail client routes.
 
 ### Module B: Inbound Receiving & Forwarding Engine (`mail.jonathansimpson.co`)
@@ -53,7 +53,7 @@
 
 ### Module D: Inbox & Thread Reader UI
 
-- **Split-Pane Layout**: Left sidebar for real-time thread lists and filtering; right workspace for reading sanitized emails inside an isolated `iframe` sandbox (`sandbox="allow-popups"`).
+- **Split-Pane Layout**: Left sidebar for real-time thread lists and filtering; right workspace for reading sanitised emails inside an isolated `iframe` sandbox (`sandbox="allow-popups"`).
 - **Thread Reply Engine**: Context-aware reply box preserving conversation depth and automatically setting proper `Reply-To` parameters.
 
 ---
@@ -72,7 +72,7 @@
 
 ## Phase 1: Environment & Foundation Setup
 
-- [ ] Initialize Next.js App Router project with TypeScript, Tailwind CSS, and Mongoose.
+- [ ] Initialise Next.js App Router project with TypeScript, Tailwind CSS, and Mongoose.
 - [ ] Configure environment variables (`MONGODB_URI`, `RESEND_API_KEY`, `RESEND_WEBHOOK_SECRET`, `BETTER_AUTH_SECRET`, `NEXT_PUBLIC_APP_URL`).
 - [ ] Establish MongoDB connection utility (`lib/mongoose.ts`).
 - [ ] Implement **Better Auth** schema configuration and API route handler (`app/api/auth/[...all]/route.ts`).
@@ -96,6 +96,6 @@
 ## Phase 4: Dashboard & Mail Client UI
 
 - [ ] Create the main application layout (`/dashboard`) featuring a split-pane interface (Thread List + Reading/Writing View).
-- [ ] Build the email reader component with an isolated, sanitized `iframe` sandboxed viewer.
+- [ ] Build the email reader component with an isolated, sanitised `iframe` sandboxed viewer.
 - [ ] Build the hybrid composition view with a toggle between WYSIWYG editing and raw HTML mode.
 - [ ] Implement thread reply functionality linking back to the outbound send pipeline.

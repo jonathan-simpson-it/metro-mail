@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   const session = await (await getAuth()).api.getSession({ headers: await headers() });
   if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorised" }, { status: 401 });
   }
 
   const messageId = new URL(request.url).searchParams.get("messageId");

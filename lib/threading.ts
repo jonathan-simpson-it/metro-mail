@@ -1,7 +1,7 @@
 const PREFIXES = /^\s*(re|fwd?|aw|sv|antw|antwort|odp|tr):\s*/i;
 
 /**
- * Normalizes a subject line for thread matching:
+ * Normalises a subject line for thread matching:
  * strips reply/forward prefixes, collapses whitespace, lowercases.
  */
 export function normalizeSubject(subject: string): string {

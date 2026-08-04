@@ -7,7 +7,7 @@ import { LoginForm } from "@/components/auth/login-form";
 export const dynamic = "force-dynamic";
 
 /**
- * Real session check — redirects to the dashboard only when the session is
+ * Real session check. Redirects to the dashboard only when the session is
  * actually valid. A stale cookie renders the form instead of looping.
  */
 export default async function LoginPage() {

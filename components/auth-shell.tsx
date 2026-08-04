@@ -48,7 +48,7 @@ export function AuthShell({
           jonathansimpson.co
         </a>
         <p className="text-xs text-muted">
-          © {new Date().getFullYear()} {site.name} — All rights reserved.
+          © {new Date().getFullYear()} {site.name} All rights reserved.
         </p>
       </footer>
     </div>

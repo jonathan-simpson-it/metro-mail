@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 /**
  * Request-boundary session guard (Next.js 16 `proxy`, Node runtime).
- * Fast cookie-presence check only — real validation happens server-side
+ * Fast cookie-presence check only. Real validation happens server-side
  * in the dashboard layout and auth pages via `auth.api.getSession`.
  *
  * Auth pages are deliberately NOT bounced here: a stale/invalid cookie must

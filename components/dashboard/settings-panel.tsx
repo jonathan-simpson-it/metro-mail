@@ -231,7 +231,7 @@ export function SettingsPanel({
         <div className="border-b border-line px-5 py-4">
           <h2 className={sectionTitle}>Password</h2>
           <p className="mt-1 text-xs text-muted">
-            Set your own password here — useful if your browser did not offer to save the
+            Set your own password here. Useful if your browser did not offer to save the
             generated one at signup.
           </p>
         </div>
@@ -292,7 +292,7 @@ export function SettingsPanel({
             </button>
             {passwordSaved ? (
               <span className="font-mono text-[0.72rem] tracking-[0.1em] text-sage-text">
-                PASSWORD UPDATED — OTHER SESSIONS SIGNED OUT
+                PASSWORD UPDATED · OTHER SESSIONS SIGNED OUT
               </span>
             ) : null}
             {passwordError ? <span className="text-xs text-ink">{passwordError}</span> : null}
@@ -351,7 +351,7 @@ export function SettingsPanel({
         {/* Rules list */}
         {rules.length === 0 ? (
           <p className="px-5 py-8 text-center text-xs text-muted">
-            No routing rules yet — inbound mail is only stored, not forwarded.
+            No routing rules yet. Inbound mail is only stored, not forwarded.
           </p>
         ) : (
           <ul className="divide-y divide-line">

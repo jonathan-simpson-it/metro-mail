@@ -2,8 +2,8 @@
 
 > This document is the single source of truth for how JS&C looks, feels, and thinks. It serves two purposes:
 >
-> 1. **Design System** — The code-level tokens, components, and patterns any builder needs to ship UI that feels native to JS&C.
-> 2. **Agency Methodology** — The principles, process, and philosophy behind every design decision.
+> 1. **Design System**: The code-level tokens, components, and patterns any builder needs to ship UI that feels native to JS&C.
+> 2. **Agency Methodology**: The principles, process, and philosophy behind every design decision.
 
 ---
 
@@ -11,34 +11,34 @@
 
 ### 1. Visual Identity
 
-JS&C's visual identity is built on a **monochrome + single accent** palette. The aesthetic is editorial, restrained, and high-contrast — inspired by Swiss typographic minimalism, architectural drafting, and boutique consultancy branding.
+JS&C's visual identity is built on a **monochrome + single accent** palette. The aesthetic is editorial, restrained, and high-contrast, inspired by Swiss typographic minimalism, architectural drafting, and boutique consultancy branding.
 
 **Key characteristics:**
 
 - Warm cream backgrounds (`#f4f4ef`) provide a tactile, non-clinical feel vs. pure white
-- Near-black ink (`#161714`) for primary text — not pure black, softer on eyes
-- Sage-green accent (`#80988f`) is the only color — used sparingly for eyebrows, hover states, and visual rhythm
+- Near-black ink (`#161714`) for primary text (not pure black, softer on eyes
+- Sage-green accent (`#80988f`) is the only colour, used sparingly for eyebrows, hover states, and visual rhythm
 - Single serif font for display/headings (Georgia), sans-serif for body (Inter)
 - No gradients, no heavy shadows, no decorative flourishes
-- Border lines (`#d6d8d1`) are light and recede — structure comes from content, not boxes
+- Border lines (`#d6d8d1`) are light and recede: structure comes from content, not boxes
 
-### 2. Color System
+### 2. Colour System
 
 ```css
 :root {
   /* Background & Surface */
-  --color-bg: #f4f4ef; /* page background — warm cream */
+  --color-bg: #f4f4ef; /* page background: warm cream */
   --color-surface: #ffffff; /* card, panel, elevated surfaces */
 
   /* Text */
-  --color-ink: #161714; /* primary text — near-black */
-  --color-muted: #5c5e56; /* secondary text — olive-gray */
+  --color-ink: #161714; /* primary text: near-black */
+  --color-muted: #5c5e56; /* secondary text: olive-grey */
 
   /* Structure */
   --color-line: #d6d8d1; /* borders, dividers, hr */
 
   /* Accent */
-  --color-accent: #80988f; /* sage green — the only color */
+  --color-accent: #80988f; /* sage green: the only colour */
   --color-accent-soft: #e3e9e6; /* soft sage for chip backgrounds */
 }
 ```
@@ -50,7 +50,7 @@ JS&C's visual identity is built on a **monochrome + single accent** palette. The
 - `--color-ink` is for all headings and body text on light backgrounds.
 - `--color-muted` is for secondary text, meta info, descriptions.
 - `--color-line` is for all borders, separators, horizontal rules.
-- `--color-accent` is for eyebrows, hover accents, small decorative elements — never for large areas.
+- `--color-accent` is for eyebrows, hover accents, small decorative elements, never for large areas.
 - `--color-accent-soft` is for tag/chip backgrounds, subtle hover surfaces.
 
 ### 3. Typography System
@@ -80,12 +80,12 @@ JS&C's visual identity is built on a **monochrome + single accent** palette. The
 
 **Typography rules:**
 
-- Never use Georgia or any serif for body text — only for headings h1-h2 and the brand mark
+- Never use Georgia or any serif for body text; only for headings h1-h2 and the brand mark
 - The brand mark is serif, `0.9rem`, uppercase, `letter-spacing: 0.07em`
-- Section eyebrows (`.section-eyebrow`) are always `0.72rem`, uppercase, `letter-spacing: 0.1em`, accent color
+- Section eyebrows (`.section-eyebrow`) are always `0.72rem`, uppercase, `letter-spacing: 0.1em`, accent colour
 - Buttons are `0.78rem`, uppercase, `letter-spacing: 0.06em`
 - Maximum line length for body text should be ~40–50rem (keep readable)
-- Body text color is always `var(--color-muted)` for paragraphs/lists, `var(--color-ink)` for headings
+- Body text colour is always `var(--color-muted)` for paragraphs/lists, `var(--color-ink)` for headings
 
 ### 4. Spacing & Layout
 
@@ -130,10 +130,10 @@ JS&C's visual identity is built on a **monochrome + single accent** palette. The
 
 #### Cards (`.panel-card`)
 
-- Used for all content surfaces — services, capabilities, plans, CTAs, product cards
+- Used for all content surfaces: services, capabilities, plans, CTAs, product cards
 - Always: 1px `--color-line` border, `--radius-lg`, `--color-surface` bg, `--shadow-soft`
 - padding: `1.2rem`
-- Hover: subtle lift (`translateY(-2px)`) — only when `prefers-reduced-motion: no-preference`
+- Hover: subtle lift (`translateY(-2px)`): only when `prefers-reduced-motion: no-preference`
 
 #### Tags/Chips (`.chip-list`)
 
@@ -142,7 +142,7 @@ JS&C's visual identity is built on a **monochrome + single accent** palette. The
 
 #### Section Intro (`.section-intro`)
 
-- Eyebrow (`.section-eyebrow`): `0.72rem`, uppercase, accent color
+- Eyebrow (`.section-eyebrow`): `0.72rem`, uppercase, accent colour
 - h2: serif display, large
 - Description: muted body text
 - Used at the top of every content section
@@ -205,15 +205,15 @@ BaseLayout
 
 **Grid:** `.footer-inner` → `2fr 1fr 1fr 1fr 1fr` gap `2rem`. At `≤768px` → `1fr 1fr`, brand spans `grid-column: 1 / -1`.
 
-**`.footer-heading`** — `0.75rem`, uppercase, letter-spacing `0.08em`, color `var(--color-accent)`. Used as the title for each column.
+**`.footer-heading`**: `0.75rem`, uppercase, letter-spacing `0.08em`, colour `var(--color-accent)`. Used as the title for each column.
 
-**`.footer-brand-large`** — serif (`--font-display`), `clamp(1.6rem, 4.5vw, 3.5rem)`, near-black (`--color-ink`).
+**`.footer-brand-large`**: serif (`--font-display`), `clamp(1.6rem, 4.5vw, 3.5rem)`, near-black (`--color-ink`).
 
-**`.footer-links` a** — `0.9rem`, `--color-ink`, no underline. Hover/focus → `--color-accent`.
+**`.footer-links` a**: `0.9rem`, `--color-ink`, no underline. Hover/focus → `--color-accent`.
 
-**`.site-footer`** — `border-top: 1px solid var(--color-line)`, padding-block `~3rem`.
+**`.site-footer`**: `border-top: 1px solid var(--color-line)`, padding-block `~3rem`.
 
-**`.footer-meta`** — `border-top: 1px solid var(--color-line)`, `0.85rem` muted text.
+**`.footer-meta`**: `border-top: 1px solid var(--color-line)`, `0.85rem` muted text.
 
 **Data source:** Links, brand name, and tagline come from `siteConfig.ts`. Social links array: currently `[{ label: "LinkedIn", href: "https://www.linkedin.com/company/jonathan-simpson-co" }]`. Help column renders conditionally.
 
@@ -231,7 +231,7 @@ BaseLayout
 
 - **Single file:** `src/styles/global.css` (~2,834 lines)
 - **Naming convention:** BEM-like (`.block__element--modifier`), flat selectors
-- **Custom properties:** All tokens in `:root` at the top — never hardcode values
+- **Custom properties:** All tokens in `:root` at the top; never hardcode values
 - **Section comments** delimit logical groups: `/* ======= Services ======= */`
 - **Scoped styles** in `.astro` components use `<style>` tags when needed (e.g., shadow-specific overrides, animations)
 - **Animation:** Use CSS `transition` for interactive elements (220ms ease). Respect `prefers-reduced-motion` via media query. Hover effects only animate when user has no motion preference.
@@ -239,11 +239,11 @@ BaseLayout
 
 ### 9. SEO & Structured Data
 
-- Every page must use `BaseLayout` which provides OG tags, Twitter cards, canonical URL, favicon, and organization JSON-LD
+- Every page must use `BaseLayout` which provides OG tags, Twitter cards, canonical URL, favicon, and organisation JSON-LD
 - Every page has a `StructuredData` component for page-specific JSON-LD (`WebSite`, `WebPage`, `CollectionPage`, `BlogPosting`, `BreadcrumbList`, `FAQPage`)
 - Blog posts additionally include: `BlogPosting` schema with headline, datePublished, dateModified, image, wordCount, timeRequired, author, publisher
-- Sitemap auto-generated via `src/pages/sitemap.xml.ts` — includes all published pages, projects, blog posts
-- Robots.txt auto-generated via `src/pages/robots.txt.ts` — disallows `/api/` and `/tickets/`
+- Sitemap auto-generated via `src/pages/sitemap.xml.ts`: includes all published pages, projects, blog posts
+- Robots.txt auto-generated via `src/pages/robots.txt.ts`: disallows `/api/` and `/tickets/`
 - Canonical URLs use `Astro.url.pathname` + site base
 - Hreflang tags: `en` + `x-default`
 - OG image handling: blog posts use 1260x750, other pages 1080x1080
@@ -256,13 +256,13 @@ BaseLayout
 
 #### 1. Editorial Restraint
 
-Every element must earn its place. If it doesn't serve the content hierarchy or the user's next decision, remove it. JS&C is not a "more is more" agency — the sites we build communicate through structure, not decoration.
+Every element must earn its place. If it doesn't serve the content hierarchy or the user's next decision, remove it. JS&C is not a "more is more" agency: the sites we build communicate through structure, not decoration.
 
 #### 2. Content Is the Interface
 
-Typography and spacing do the heavy lifting. The hierarchy of a page should be legible even without color — it's in the scale, weight, and position of type. Our designs read like editorial layouts because information design comes first.
+Typography and spacing do the heavy lifting. The hierarchy of a page should be legible even without colour: it's in the scale, weight, and position of type. Our designs read like editorial layouts because information design comes first.
 
-#### 3. One Accent Color
+#### 3. One Accent Colour
 
 Sage green (`#80988f`) is the only accent. It's used for:
 
@@ -275,11 +275,11 @@ This restriction forces intentionality. If everything is highlighted, nothing is
 
 #### 4. Dark/Sharp Aesthetic
 
-Contrast is high. Backgrounds are warm cream, text is near-black. Cards have thin, sharp borders (no blurry shadows). The hero uses a full-viewport video with a dark gradient overlay. The brand mark is uppercase serif with tight letter-spacing — it should feel like a letterhead, not a logo.
+Contrast is high. Backgrounds are warm cream, text is near-black. Cards have thin, sharp borders (no blurry shadows). The hero uses a full-viewport video with a dark gradient overlay. The brand mark is uppercase serif with tight letter-spacing; it should feel like a letterhead, not a logo.
 
 #### 5. Motion with Purpose
 
-Transitions are fast (220ms), subtle, and always tied to interaction. No decorative animations, no scroll-triggered reveals for the sake of it. Hover effects lift cards 2px. Button hover changes background color. That's it.
+Transitions are fast (220ms), subtle, and always tied to interaction. No decorative animations, no scroll-triggered reveals for the sake of it. Hover effects lift cards 2px. Button hover changes background colour. That's it.
 
 #### 6. Build for AEO/GEO
 
@@ -294,11 +294,11 @@ Sites must be discoverable not just through Google but through AI search (ChatGP
 
 JS&C follows a 5-step process (represented in `ProcessSteps.astro`):
 
-1. **Discovery** — Audit existing systems, understand workflows, identify bottlenecks
-2. **Strategy** — Define success metrics, choose technology, plan architecture
-3. **Design** — Wireframe → high-fidelity mockup → prototype (iterative, client-reviewed)
-4. **Build** — Production-grade code, CI/CD pipelines, automated testing
-5. **Launch & Iterate** — Deploy, monitor, train team, continuous improvement
+1. **Discovery**: Audit existing systems, understand workflows, identify bottlenecks
+2. **Strategy**: Define success metrics, choose technology, plan architecture
+3. **Design**: Wireframe → high-fidelity mockup → prototype (iterative, client-reviewed)
+4. **Build**: Production-grade code, CI/CD pipelines, automated testing
+5. **Launch & Iterate**: Deploy, monitor, train team, continuous improvement
 
 ### 12. Tone of Voice & Copy Guidelines
 
@@ -313,37 +313,37 @@ JS&C follows a 5-step process (represented in `ProcessSteps.astro`):
 
 Every page follows the AIDA-esque structure:
 
-- **Eyebrow** — 2-4 word category label (e.g., "Services", "Capabilities", "Process")
-- **Title** — Serif display heading, compelling and clear
-- **Description** — 1-3 sentences that expand the title, written in muted color
-- **Content** — Cards, grids, lists, or body text
-- **CTA** — Every section either has an implicit CTA (contact, explore) or an explicit button in a CTA band
+- **Eyebrow**: 2-4 word category label (e.g., "Services", "Capabilities", "Process")
+- **Title**: Serif display heading, compelling and clear
+- **Description**: 1-3 sentences that expand the title, written in muted colour
+- **Content**: Cards, grids, lists, or body text
+- **CTA**: Every section either has an implicit CTA (contact, explore) or an explicit button in a CTA band
 
 ### 14. Accessibility Standards
 
 - All interactive elements must have `:focus-visible` styles
 - Buttons with icon-only content need `aria-label`
 - Skip-to-content link is present (`.skip-link`)
-- Color contrast: ink-on-surface passes AAA, muted-on-surface passes AA
-- `prefers-reduced-motion` fully respected — no animations when reduced motion is preferred
+- Colour contrast: ink-on-surface passes AAA, muted-on-surface passes AA
+- `prefers-reduced-motion` fully respected; no animations when reduced motion is preferred
 - All images have `alt` text
 - Semantic HTML throughout: `<main>`, `<nav>`, `<section>`, `<article>`, `<aside>`, `<figure>`
 - Lists use `role="list"` where `display` overrides native semantics
 
-### 15. File Organization & Conventions
+### 15. File Organisation & Conventions
 
 ```
 src/
-  components/       — Reusable .astro components (PascalCase)
-  content/          — Markdown collections: blog/, projects/
-  data/             — siteConfig.ts (single source of truth for all content)
-  layouts/          — BaseLayout.astro (root HTML shell)
-  lib/              — Utility modules (CRM client, ROI calculator)
-  pages/            — File-based routing (kebab-case)
-    api/            — API endpoints (contact.ts, tickets.ts)
-    blog/           — Blog archive + dynamic [slug]
-    work/           — Case study archive + dynamic [slug]
-  styles/           — global.css (all site styles)
+  components/ - Reusable .astro components (PascalCase)
+  content/ - Markdown collections: blog/, projects/
+  data/ - siteConfig.ts (single source of truth for all content)
+  layouts/ - BaseLayout.astro (root HTML shell)
+  lib/ - Utility modules (CRM client, ROI calculator)
+  pages/ - File-based routing (kebab-case)
+    api/           : API endpoints (contact.ts, tickets.ts)
+    blog/          : Blog archive + dynamic [slug]
+    work/          : Case study archive + dynamic [slug]
+  styles/ - global.css (all site styles)
 ```
 
 **Naming conventions:**
@@ -360,16 +360,16 @@ src/
 - **No CMS.** All content is managed via:
   - `src/data/siteConfig.ts` for global content (navigation, brands, services, profiles, CTA text, SEO defaults)
   - `src/content/*.md` for blog posts and case studies (Zod-validated frontmatter)
-- Content changes require code deployment — this is intentional (version-controlled, reviewable, auditable)
-- Blog posts use `pubDate` for scheduling — set a future date and the post won't render in production
+- Content changes require code deployment; this is intentional (version-controlled, reviewable, auditable)
+- Blog posts use `pubDate` for scheduling; set a future date and the post won't render in production
 - The `draft: true` flag hides content from all environments
 
 ### 17. Performance Budget
 
 - Astro SSR with Vercel edge deployment
-- Sharp for image optimization
+- Sharp for image optimisation
 - Full-viewport hero video with poster image fallback and preload
 - Auto-generated srcset/sizes for Pexels CDN images in blog posts
-- No client-side JavaScript frameworks — only vanilla JS in `<script>` tags
-- CSS is a single file (critical path concerns not yet addressed — future consideration)
+- No client-side JavaScript frameworks: only vanilla JS in `<script>` tags
+- CSS is a single file (critical path concerns not yet addressed; future consideration)
 - Fonts: Inter loaded from system/Google Fonts (no self-hosted fonts currently)

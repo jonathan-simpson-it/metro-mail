@@ -30,7 +30,7 @@ async function createAuth() {
 
   const [client, db] = await Promise.all([getMongoClient(), getMongoDb()]);
 
-  // Browser fetch sends an Origin header — localhost must be trusted in dev,
+  // Browser fetch sends an Origin header. Localhost must be trusted in dev,
   // even when BETTER_AUTH_URL / NEXT_PUBLIC_APP_URL point at production.
   const localDevOrigins =
     process.env.NODE_ENV === "development"
@@ -45,7 +45,7 @@ async function createAuth() {
     rateLimit: {
       enabled: true,
       window: 60, // seconds
-      max: 20, // requests per window per IP — brute-force guard
+      max: 20, // requests per window per IP: brute-force guard
     },
     emailAndPassword: {
       enabled: true,
@@ -91,7 +91,7 @@ async function createAuth() {
 }
 
 /**
- * Lazy Better Auth instance — built on first use so missing credentials
+ * Lazy Better Auth instance. Built on first use so missing credentials
  * never crash module evaluation (build/CI), only the requests that need it.
  */
 export function getAuth() {

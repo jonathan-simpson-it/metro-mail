@@ -17,7 +17,7 @@ function mongoUri(): string {
 }
 
 /**
- * Cached Mongoose connection — survives HMR in dev, reused across
+ * Cached Mongoose connection. Survives HMR in dev, reused across
  * serverless invocations in production.
  */
 export async function connectToDatabase() {

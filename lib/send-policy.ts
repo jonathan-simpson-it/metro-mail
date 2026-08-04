@@ -6,7 +6,7 @@ function parseLimit(raw: string | undefined, fallback: number): number {
   if (!Number.isFinite(n) || n <= 0) {
     if (raw !== undefined && raw !== "") {
       console.error(
-        `[send-policy] invalid limit "${raw}" — falling back to ${fallback}`,
+        `[send-policy] invalid limit "${raw}", falling back to ${fallback}`,
       );
     }
     return fallback;
@@ -25,7 +25,7 @@ export interface DailySendStats {
 
 /**
  * Per-sender daily outbound cap (Mongo-backed, survives restarts).
- * Throws nothing — returns true when the sender is over the limit.
+ * Throws nothing. Returns true when the sender is over the limit.
  */
 export async function isOverDailySendLimit(senderAddress: string): Promise<boolean> {
   try {
@@ -46,7 +46,7 @@ export async function isOverDailySendLimit(senderAddress: string): Promise<boole
 /**
  * Daily send volume for a sender address, plus the configured limits.
  * Used by the compose send guard and the campaign quota indicator.
- * Throws nothing — degrades to zero volume so sending is never blocked
+ * Throws nothing. Degrades to zero volume so sending is never blocked
  * by an analytics failure (the hard wall lives in isOverDailySendLimit).
  */
 export async function getDailySendStats(senderAddress: string): Promise<DailySendStats> {

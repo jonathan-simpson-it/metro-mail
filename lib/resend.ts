@@ -3,7 +3,7 @@ import { Resend } from "resend";
 let client: Resend | null = null;
 
 /**
- * Lazy Resend singleton — avoids crashing module evaluation (build-time)
+ * Lazy Resend singleton. Avoids crashing module evaluation (build-time)
  * when the key isn't present yet; fails closed on first real use.
  */
 export function getResend(): Resend {

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FileText, Paperclip, PaperPlaneTilt } from "@phosphor-icons/react";
+import { Eye, FileText, Paperclip, PaperPlaneTilt } from "@phosphor-icons/react";
 import { formatSenderAddress, site } from "@/lib/site";
 import { EMAIL_LIMITS, EMAIL_RE, hasUnresolvedTokens } from "@/lib/email-text";
 import { highlightTokens } from "@/lib/personalize";
@@ -255,6 +255,51 @@ export function Composer({
     e.target.value = "";
   }
 
+  /* ---------------- preview ---------------- */
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewHtml, setPreviewHtml] = useState<string | null>(null);
+  const [previewBusy, setPreviewBusy] = useState(false);
+  const [previewTokens, setPreviewTokens] = useState(false);
+
+  async function openPreview() {
+    const bodyHtml = editorRef.current?.getHTML() ?? html;
+    if (!bodyHtml.trim()) {
+      setError("Write a message before previewing.");
+      return;
+    }
+    setPreviewBusy(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ html: bodyHtml }),
+      });
+      const data = (await res.json().catch(() => null)) as {
+        html?: string;
+        unresolvedTokens?: boolean;
+        error?: string;
+      } | null;
+      if (!res.ok || !data?.html) {
+        setError(data?.error ?? "Could not render preview.");
+        return;
+      }
+      setPreviewHtml(data.html);
+      setPreviewTokens(Boolean(data.unresolvedTokens));
+      setPreviewOpen(true);
+    } catch {
+      setError("Could not render preview. Check your connection.");
+    } finally {
+      setPreviewBusy(false);
+    }
+  }
+
+  function closePreview() {
+    setPreviewOpen(false);
+    setPreviewHtml(null);
+  }
+
   /* ---------------- send ---------------- */
 
   interface SendPayload {
@@ -318,7 +363,7 @@ export function Composer({
         ? customFromAlias.trim()
         : defaultFromAlias;
 
-    // Snapshot the whole payload now — anything after this point may change
+    // Snapshot the whole payload now. Anything after this point may change
     // while the dialog is open, and a send must match what the user saw.
     const payload = buildPayload(fromName, fromAlias, bodyHtml);
     submittingRef.current = true;
@@ -354,7 +399,7 @@ export function Composer({
           }
         }
       } catch {
-        // Quota unavailable — the server hard wall still protects the limit.
+        // Quota unavailable. The server hard wall still protects the limit.
       }
 
       if (!guardShown) {
@@ -647,7 +692,16 @@ export function Composer({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-4 border-t border-line bg-cream/50 px-5 py-4">
+        <div className="flex flex-wrap items-center gap-4 border-t border-line bg-cream/50 px-5 py-4">
+          <button
+            type="button"
+            className="btn btn--ghost btn--small !rounded-md"
+            disabled={previewBusy}
+            onClick={openPreview}
+          >
+            <Eye size={13} weight="bold" />
+            {previewBusy ? "Rendering…" : "Preview"}
+          </button>
           <button type="submit" className="btn btn--solid" disabled={sending}>
             <PaperPlaneTilt size={13} weight="bold" />
             {sending ? "Sending…" : "Send message"}
@@ -655,6 +709,46 @@ export function Composer({
           {error ? <p className="text-xs text-ink" role="alert">{error}</p> : null}
         </div>
       </form>
+
+      {previewOpen && previewHtml ? (
+        <div
+          className="fixed inset-0 z-(--z-dialog-backdrop) flex items-center justify-center bg-ink/50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Email preview"
+          onClick={closePreview}
+        >
+          <div
+            className="panel flex max-h-[90dvh] w-full max-w-3xl flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-line px-5 py-3">
+              <div>
+                <p className="eyebrow">Branded preview</p>
+                {previewTokens ? (
+                  <p className="mt-0.5 text-xs text-ink">
+                    Template tokens remain unreplaced ({"{{…}}"}) and will block
+                    the send until filled.
+                  </p>
+                ) : null}
+              </div>
+              <button
+                type="button"
+                className="btn btn--ghost btn--small !rounded-md"
+                onClick={closePreview}
+              >
+                Close
+              </button>
+            </div>
+            <iframe
+              title="Email preview"
+              sandbox="allow-popups"
+              srcDoc={previewHtml}
+              className="w-full flex-1 border-0 bg-cream"
+            />
+          </div>
+        </div>
+      ) : null}
 
       <SendGuardDialog
         open={guardQuota !== null}

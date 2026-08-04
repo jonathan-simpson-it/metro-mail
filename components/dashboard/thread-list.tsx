@@ -60,7 +60,7 @@ export function ThreadList({
   const selected = threads.find((t) => t.id === selectedThreadId) ?? null;
 
   return (
-    <div className="mx-auto grid w-full max-w-[1400px] flex-1 gap-px bg-line lg:grid-cols-[340px_minmax(0,1fr)]">
+    <div className="mx-auto grid w-full max-w-[1400px] flex-1 gap-px bg-line lg:grid-cols-[280px_minmax(0,1fr)]">
       {/* Thread rail */}
       <aside className="flex min-h-0 flex-col border-b border-line bg-cream lg:h-[calc(100dvh-3.5rem)] lg:border-b-0">
         <div className="border-b border-line p-4">

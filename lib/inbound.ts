@@ -93,7 +93,7 @@ export async function processInboundEmail(eventData: InboundEventData) {
 
   const { email_id: emailId } = eventData;
 
-  // Idempotency — Resend retries webhooks; skip already-persisted emails.
+  // Idempotency. Resend retries webhooks; skip already-persisted emails.
   const existing = await Message.findOne({ resendEmailId: emailId }).lean();
   if (existing) return { persisted: false, forwarded: [] };
 
@@ -109,7 +109,7 @@ export async function processInboundEmail(eventData: InboundEventData) {
   const recipients = (receivedFor.length > 0 ? receivedFor : email.to ?? eventData.to ?? []).filter(Boolean);
   const subject = email.subject ?? eventData.subject ?? "(no subject)";
 
-  // Sanitize attacker-controlled headers — they later flow into outbound
+  // Sanitise attacker-controlled headers. They later flow into outbound
   // In-Reply-To/References and must never carry CRLF.
   const messageId = stripHeaderControl(
     email.message_id ?? getHeader(email.headers, "message-id") ?? `<${emailId}@${site.mailDomain}>`,
@@ -119,7 +119,7 @@ export async function processInboundEmail(eventData: InboundEventData) {
     stripHeaderControl(getHeader(email.headers, "references") ?? ""),
   );
 
-  // --- Thread resolution: References chain → normalized subject match → new thread
+  // --- Thread resolution: References chain → normalised subject match → new thread
   let threadId: string;
 
   const refIds = [...(inReplyTo ? [inReplyTo] : []), ...references];
@@ -194,7 +194,7 @@ export async function processInboundEmail(eventData: InboundEventData) {
       attachments,
     });
   } catch (err) {
-    // Concurrent webhook delivery — duplicate key on resendEmailId means a
+    // Concurrent webhook delivery. A duplicate key on resendEmailId means a
     // sibling request already persisted this email. Not an error.
     const code = (err as { code?: number })?.code;
     if (code === 11000) {
