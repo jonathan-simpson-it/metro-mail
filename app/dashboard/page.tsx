@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { Thread } from "@/models/Thread";
 import { Message } from "@/models/Message";
 import { ThreadList } from "@/components/dashboard/thread-list";
+import { DEFAULT_SENDER_ALIAS, DEFAULT_SENDER_NAME } from "@/lib/site";
 import type PageProps from "next";
 
 export const dynamic = "force-dynamic";
@@ -61,6 +62,14 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
       threads={threads}
       selectedThreadId={selectedThreadId}
       userEmail={session.user.email}
+      defaultFromName={
+        (session.user as typeof session.user & { fromName?: string }).fromName ??
+        DEFAULT_SENDER_NAME
+      }
+      defaultFromAlias={
+        (session.user as typeof session.user & { fromAlias?: string }).fromAlias ??
+        DEFAULT_SENDER_ALIAS
+      }
       messages={messages}
     />
   );

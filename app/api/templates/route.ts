@@ -28,9 +28,9 @@ export async function GET() {
   }
 
   await connectToDatabase();
-  if ((await Template.countDocuments()) === 0) {
-    await seedTemplates();
-  }
+  // Seeded slugs are code-owned and refreshed on every fetch ($set upsert
+  // in lib/seed-templates.ts); custom templates are untouched.
+  await seedTemplates();
 
   const templates = await Template.find()
     .sort({ order: 1 })

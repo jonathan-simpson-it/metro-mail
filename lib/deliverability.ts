@@ -36,6 +36,7 @@ export interface DeliverabilityData {
   warmth: WarmthResult;
   trackingEnabled: boolean;
   recentEvents: {
+    eventId: string;
     resendEmailId: string;
     type: string;
     createdAt: Date;
@@ -78,10 +79,31 @@ export async function getDeliverabilityData(): Promise<DeliverabilityData> {
   const since30 = new Date(Date.now() - 30 * DAY);
   const since14 = new Date(Date.now() - 14 * DAY);
 
-  const [sent30, events30, firstMessage, activeDays, dailyVolume, recentEvents, domain] =
+  // Outbound sends in the window. Event-based metrics are scoped to these
+  // resendEmailIds so every counted event belongs to an email that is also
+  // in the denominator: delivered/opened can never exceed sent, and rates
+  // can never exceed 100%.
+  const sentMessages = await Message.find({
+    direction: "outbound",
+    createdAt: { $gte: since30 },
+  })
+    .select("resendEmailId")
+    .lean();
+  const sentIds = new Set(
+    sentMessages
+      .map((m) => m.resendEmailId)
+      .filter((id): id is string => Boolean(id)),
+  );
+  const sent30 = sentIds.size;
+
+  const [events30, firstMessage, activeDays, dailyVolume, recentEvents, domain] =
     await Promise.all([
-      Message.countDocuments({ direction: "outbound", createdAt: { $gte: since30 } }),
-      EmailEvent.find({ createdAt: { $gte: since30 } }).select("resendEmailId type url").lean(),
+      EmailEvent.find({
+        createdAt: { $gte: since30 },
+        resendEmailId: { $in: [...sentIds] },
+      })
+        .select("resendEmailId type url")
+        .lean(),
       Message.findOne({ direction: "outbound" }).sort({ createdAt: 1 }).select("createdAt").lean(),
       // Distinct days with at least one outbound send in the last 14 days.
       Message.aggregate<{ _id: string }>([
@@ -118,8 +140,6 @@ export async function getDeliverabilityData(): Promise<DeliverabilityData> {
     createdAt: { $gte: since30 },
   });
 
-  const typeCount = (type: string) =>
-    events30.filter((e) => e.type === type).length;
   const uniqueByType = (type: string) =>
     new Set(events30.filter((e) => e.type === type).map((e) => e.resendEmailId)).size;
 
@@ -168,7 +188,7 @@ export async function getDeliverabilityData(): Promise<DeliverabilityData> {
     domain,
     stats: {
       sent30,
-      delivered30: typeCount("delivered"),
+      delivered30: uniqueByType("delivered"),
       bounced30: bounced,
       uniqueOpens30: uniqueOpens,
       uniqueClicks30: uniqueClicks,
@@ -184,6 +204,7 @@ export async function getDeliverabilityData(): Promise<DeliverabilityData> {
     warmth,
     trackingEnabled,
     recentEvents: recentEvents.map((e) => ({
+      eventId: e.eventId,
       resendEmailId: e.resendEmailId,
       type: e.type,
       createdAt: e.createdAt,

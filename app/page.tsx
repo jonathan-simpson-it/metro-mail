@@ -14,7 +14,7 @@ export default async function LandingPage() {
   return (
     <AuthShell
       title={site.productName}
-      description="Corporate communications, engineered. Secure inbound routing, threaded conversation history, and branded outbound delivery for Jonathan Simpson & Co."
+      description="Corporate communications, engineered. Secure inbound routing, threaded conversation history, and personal, plain-text outbound delivery for Jonathan Simpson & Co."
     >
       <div className="flex flex-col gap-3">
         <Link href="/login" className="btn btn--solid w-full">

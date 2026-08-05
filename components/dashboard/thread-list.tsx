@@ -31,11 +31,15 @@ export function ThreadList({
   threads,
   selectedThreadId,
   userEmail,
+  defaultFromName,
+  defaultFromAlias,
   messages,
 }: {
   threads: ThreadListItem[];
   selectedThreadId: string | null;
   userEmail: string;
+  defaultFromName: string;
+  defaultFromAlias: string;
   messages: ReaderMessage[];
 }) {
   const router = useRouter();
@@ -133,6 +137,8 @@ export function ThreadList({
             thread={selected}
             messages={messages}
             userEmail={userEmail}
+            defaultFromName={defaultFromName}
+            defaultFromAlias={defaultFromAlias}
           />
         ) : selected ? (
           <EmptyState

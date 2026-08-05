@@ -724,7 +724,7 @@ export function Composer({
           >
             <div className="flex items-center justify-between border-b border-line px-5 py-3">
               <div>
-                <p className="eyebrow">Branded preview</p>
+                <p className="eyebrow">Email preview</p>
                 {previewTokens ? (
                   <p className="mt-0.5 text-xs text-ink">
                     Template tokens remain unreplaced ({"{{…}}"}) and will block

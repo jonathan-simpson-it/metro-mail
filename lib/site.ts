@@ -18,8 +18,6 @@ export const site = {
   coFounderName: "Lewis Simpson",
   /** Ink-on-transparent logo variant for light UI surfaces. */
   brandLogoInk: "/brand/jsc-mark-ink.svg",
-  /** Fully-qualified email logo URL. Email clients cannot resolve relative paths. */
-  emailLogoUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/brand/JSC-logo.png`,
 } as const;
 
 if (
@@ -27,7 +25,7 @@ if (
   !process.env.NEXT_PUBLIC_APP_URL
 ) {
   throw new Error(
-    "NEXT_PUBLIC_APP_URL must be set in production. Outbound emails embed it for the logo and links.",
+    "NEXT_PUBLIC_APP_URL must be set in production. The app uses it for absolute asset URLs.",
   );
 }
 

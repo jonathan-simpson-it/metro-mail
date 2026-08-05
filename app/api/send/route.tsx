@@ -1,11 +1,9 @@
 import { headers } from "next/headers";
-import { render } from "@react-email/render";
 import mongoose from "mongoose";
 import sanitizeHtml from "sanitize-html";
 import { getAuth } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/mongoose";
 import { getResend } from "@/lib/resend";
-import { MetroEmailLayout } from "@/emails/metro-layout";
 import { Thread } from "@/models/Thread";
 import { Message } from "@/models/Message";
 import { buildReferences, normalizeSubject, snippetFromText } from "@/lib/threading";
@@ -181,21 +179,27 @@ export async function POST(request: Request) {
     ) {
       return Response.json({ error: "Invalid thread reference." }, { status: 400 });
     }
-    await connectToDatabase();
-    const parent = await Message.findById(body.inReplyToMessageId)
-      .select("messageId references threadId")
-      .lean();
-    if (parent && String(parent.threadId) === body.threadId) {
-      threadId = body.threadId;
-      const chain = buildReferences(parent.messageId, parent.references);
-      threadingHeaders = {
-        "In-Reply-To": parent.messageId ?? "",
-        References: chain.join(" "),
-      };
+    try {
+      await connectToDatabase();
+      const parent = await Message.findById(body.inReplyToMessageId)
+        .select("messageId references threadId")
+        .lean();
+      if (parent && String(parent.threadId) === body.threadId) {
+        threadId = body.threadId;
+        const chain = buildReferences(parent.messageId, parent.references);
+        threadingHeaders = {
+          "In-Reply-To": parent.messageId ?? "",
+          References: chain.join(" "),
+        };
+      }
+    } catch (err) {
+      // Fail-soft: a DB hiccup must not 500 the send. The email goes out
+      // without In-Reply-To/References; threading is best-effort.
+      console.error("[send] threading lookup failed (sending without thread headers):", err);
     }
   }
 
-  // --- Render branded template (content sanitised server-side first)
+  // --- Sanitise the composed body server-side (no brand wrapper)
   const safeHtml = sanitizeHtml(html, {
     allowedTags: [
       "p", "br", "b", "strong", "i", "em", "u", "s", "strike", "a", "ul", "ol",
@@ -240,11 +244,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const htmlWithLayout = await render(
-    <MetroEmailLayout previewText={subject} contentHtml={safeHtml} />,
-    { pretty: true },
-  );
-
+  // --- Plain text-only body. The sanitised fragment is sent as-is: no
+  // brand wrapper, no banner, no footer card. Cold outreach must read
+  // like a personal 1:1 note, not a newsletter.
   const text = htmlToText(safeHtml);
 
   const { data, error } = await getResend().emails.send({
@@ -253,7 +255,7 @@ export async function POST(request: Request) {
     cc: cc.length > 0 ? cc : undefined,
     bcc: bcc.length > 0 ? bcc : undefined,
     subject,
-    html: htmlWithLayout,
+    html: safeHtml,
     text,
     headers: threadingHeaders,
     attachments:
@@ -322,7 +324,7 @@ export async function POST(request: Request) {
       cc,
       bcc,
       subject,
-      htmlBody: htmlWithLayout,
+      htmlBody: safeHtml,
       textBody: text,
       direction: "outbound",
       attachments: attachments.map((a) => ({

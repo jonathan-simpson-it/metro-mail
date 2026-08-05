@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import { ThreadListItem, ReaderMessage } from "@/components/dashboard/thread-list";
 import { ReplyDialog } from "@/components/dashboard/reply-dialog";
@@ -10,6 +10,12 @@ import { site } from "@/lib/site";
 /* ------------------------------------------------------------------ */
 /* Sanitised iframe document. Brand base styles applied to raw HTML    */
 /* ------------------------------------------------------------------ */
+
+// Stable placeholder for SSR and first paint. The sanitised body is
+// written into the iframe after mount; content is never rendered with
+// DOMPurify on the server (dompurify only attaches `.sanitize` when a
+// browser `window` exists).
+const EMPTY_SRCDOC = "<!doctype html><html><body></body></html>";
 
 function buildSanitizedDocument(rawHtml: string): string {
   const clean = DOMPurify.sanitize(rawHtml, {
@@ -66,10 +72,29 @@ function MessageCard({ message }: { message: ReaderMessage }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [iframeHeight, setIframeHeight] = useState(240);
 
-  const srcDoc = useMemo(
-    () => buildSanitizedDocument(message.htmlBody || `<p>${message.textBody || ""}</p>`),
-    [message.htmlBody, message.textBody],
-  );
+  // DOMPurify needs a browser window (its ESM export is a factory that
+  // only attaches `.sanitize` when `window` exists), so the body is
+  // sanitised and written into the iframe after mount, never during SSR.
+  // The sandbox allows same-origin (so the parent can write/measure the
+  // document) but NOT scripts: sanitised content stays inert.
+  useEffect(() => {
+    const frame = iframeRef.current;
+    if (!frame) return;
+    const write = () => {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+      doc.open();
+      doc.write(
+        buildSanitizedDocument(message.htmlBody || `<p>${message.textBody || ""}</p>`),
+      );
+      doc.close();
+    };
+    if (frame.contentDocument) {
+      write();
+    } else {
+      frame.addEventListener("load", write, { once: true });
+    }
+  }, [message.htmlBody, message.textBody]);
 
   const onLoad = useCallback(() => {
     const doc = iframeRef.current?.contentDocument;
@@ -113,8 +138,8 @@ function MessageCard({ message }: { message: ReaderMessage }) {
         <iframe
           ref={iframeRef}
           title={`Email body from ${senderDisplay}`}
-          sandbox="allow-popups"
-          srcDoc={srcDoc}
+          sandbox="allow-same-origin allow-popups"
+          srcDoc={EMPTY_SRCDOC}
           onLoad={onLoad}
           style={{ height: iframeHeight, width: "100%", border: "none" }}
           className="block"
@@ -195,10 +220,14 @@ export function ThreadReader({
   thread,
   messages,
   userEmail,
+  defaultFromName,
+  defaultFromAlias,
 }: {
   thread: ThreadListItem;
   messages: ReaderMessage[];
   userEmail: string;
+  defaultFromName: string;
+  defaultFromAlias: string;
 }) {
   const [replyOpen, setReplyOpen] = useState(false);
   const lastMessageId = messages.length > 0 ? messages[messages.length - 1].id : null;
@@ -239,6 +268,8 @@ export function ThreadReader({
         open={replyOpen}
         thread={thread}
         userEmail={userEmail}
+        defaultFromName={defaultFromName}
+        defaultFromAlias={defaultFromAlias}
         lastMessageId={lastMessageId}
         onClose={() => setReplyOpen(false)}
       />

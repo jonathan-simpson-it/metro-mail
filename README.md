@@ -1,7 +1,7 @@
 # MetroMail - Jonathan Simpson & Co.
 
-Internal email communications platform: inbound routing, thread visualization, and branded
-outbound delivery via Resend.
+Internal email communications platform: inbound routing, thread visualization, and personal,
+plain-text outbound delivery via Resend (no brand wrapper; cold outreach must read like a 1:1 note).
 
 ## Setup
 
@@ -11,7 +11,7 @@ outbound delivery via Resend.
    - `RESEND_WEBHOOK_SECRET`: from your Resend webhook config (see below)
    - `BETTER_AUTH_SECRET`: `openssl rand -base64 32`
    - `ALLOWED_EMAILS`: comma-separated signup allowlist (internal tool)
-   - `NEXT_PUBLIC_APP_URL`: deployed origin; embedded in outbound email logo/links
+   - `NEXT_PUBLIC_APP_URL`: deployed origin; used for absolute asset URLs
 2. `npm run dev` → http://localhost:3000
 
 ## Resend inbound setup
@@ -44,6 +44,7 @@ volume ramp plan live on the Deliverability tab.
 - Allowlist-only signup enforced server-side (Better Auth `databaseHooks`).
 - Webhook requests verified with Svix signature on the raw body (fail closed).
 - Inbound HTML is sanitised with DOMPurify and rendered in a `sandbox` iframe.
-- Outbound HTML is sanitised server-side (`sanitize-html`) before templating.
+- Outbound HTML is sanitised server-side (`sanitize-html`) and sent as-is
+  with no brand template wrapper.
 - Sender name/alias are CRLF-stripped and validated; daily send cap per alias.
 - Forwarding never targets the sending domain (webhook loop protection).

@@ -355,7 +355,7 @@ export default async function DeliverabilityPage() {
             <div className="mt-3">
               {recentEvents.map((e) => (
                 <div
-                  key={e.resendEmailId}
+                  key={e.eventId}
                   className="flex items-center gap-4 border-b border-line py-2.5 last:border-b-0"
                 >
                   <span className="w-24 shrink-0 font-mono text-[0.62rem] text-muted">

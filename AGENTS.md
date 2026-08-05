@@ -10,7 +10,7 @@ This version has breaking changes: APIs, conventions, and file structure may all
 
 Internal email communications platform for Jonathan Simpson & Co. (jonathansimpson.co).
 Inbound: Resend webhook (`email.received`) → hydrate → thread → per-alias forward.
-Outbound: branded React Email template → Resend on `mail.jonathansimpson.co`.
+Outbound: plain text-first HTML fragment (NO brand wrapper) → Resend on `mail.jonathansimpson.co`.
 Auth: Better Auth (allowlist-only signup). Data: Mongoose (Thread / Message / RoutingRule).
 
 ## Commands
@@ -29,7 +29,7 @@ Auth: Better Auth (allowlist-only signup). Data: Mongoose (Thread / Message / Ro
 - `app/api/send/route.tsx`: outbound (server-side sanitize-html, CRLF-safe headers, daily cap via `lib/send-policy.ts`, reply threading via `In-Reply-To`/`References`).
 - `app/api/webhooks/resend/route.ts`: Svix signature verification on raw body.
 - `proxy.ts`: Next.js 16 proxy (NOT middleware): cookie-presence redirect guard only; real session checks are server-side per page/route.
-- `emails/metro-layout.tsx`: React Email template: dark-stamp logo, Georgia wordmark, Inter body, sage hairlines, site links.
+- Outbound emails: sanitised fragment sent as-is (NO React Email template, no logo, no header/footer band). Copy must read like a personal 1:1 note: no em dashes, no bullet lists, at most one link. Templates live in `lib/seed-templates.ts` (reseeds via `$set`).
 
 ## Conventions / gotchas
 

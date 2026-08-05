@@ -1,7 +1,7 @@
 # PRODUCT.md - MetroMail (Jonathan Simpson & Co.)
 
 ## Product
-MetroMail is an internal-grade, dual-action email communications platform for **Jonathan Simpson & Co.** (`jonathansimpson.co`). It handles custom-domain inbound email (webhook → hydrate → thread → forward), thread visualization, and branded outbound delivery via Resend on `mail.jonathansimpson.co`.
+MetroMail is an internal-grade, dual-action email communications platform for **Jonathan Simpson & Co.** (`jonathansimpson.co`). It handles custom-domain inbound email (webhook → hydrate → thread → forward), thread visualization, and personal, plain-text outbound delivery via Resend on `mail.jonathansimpson.co` (no brand wrapper: outbound copy reads like a 1:1 note).
 
 ## Audience
 Internal agency partners (Lewis Simpson, Devano Jonathan) + client operations. Signup is allowlist-only (`ALLOWED_EMAILS`). No public marketing surface. The landing page is an auth gate.
@@ -15,10 +15,9 @@ Internal agency partners (Lewis Simpson, Devano Jonathan) + client operations. S
 - Motion: fast (160–220ms), purposeful, `prefers-reduced-motion` respected. No decorative animation.
 
 ## Email templates
-- React Email (`@react-email/components`, `@react-email/render`), table-based, 600px, inline styles.
-- Header: dark-stamp logo (solid `#121212` square + white serif ampersand, the only official logo asset) + Georgia serif wordmark.
-- Body font: Inter/Helvetica/Arial stack (readable; never Georgia for paragraphs). Georgia reserved for headings/wordmark.
-- Footer: logo mark, links to main site (jonathansimpson.co, LinkedIn, contact), © line.
+- Plain, personal, text-first: no brand wrapper, no banner, no logo, no footer card. Outbound copy reads like a 1:1 note (no em dashes, no bullet lists, at most one link).
+- Body font: Inter/Helvetica/Arial stack (readable; never Georgia for paragraphs).
+- Seeded templates live in `lib/seed-templates.ts` and are reseeded via `$set`; custom templates stored in Mongo.
 
 ## Key integrations
 - **Better Auth** (MongoDB adapter, `mongodb` driver; email/password; allowlist hook; `fromName`/`fromAlias` additional fields).

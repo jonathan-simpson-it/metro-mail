@@ -1,17 +1,16 @@
 import { headers } from "next/headers";
-import { render } from "@react-email/render";
 import sanitizeHtml from "sanitize-html";
 import { getAuth } from "@/lib/auth";
-import { MetroEmailLayout } from "@/emails/metro-layout";
 import { hasUnresolvedTokens } from "@/lib/email-text";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * Renders the composer body inside the full branded MetroEmailLayout so the
- * user can preview exactly what a recipient will see before sending.
- * Session-gated; the body is sanitised with the same rules as /api/send.
+ * Sanitises the composer body with the same rules as /api/send and returns
+ * it as-is (plain text-only, no brand wrapper) so the user can preview
+ * exactly what a recipient will see before sending.
+ * Session-gated.
  */
 export async function POST(request: Request) {
   const session = await (await getAuth()).api.getSession({ headers: await headers() });
@@ -50,13 +49,8 @@ export async function POST(request: Request) {
     allowedSchemesByTag: { img: ["https", "http"] },
   });
 
-  const rendered = await render(
-    <MetroEmailLayout previewText="Email preview" contentHtml={safeHtml} />,
-    { pretty: true },
-  );
-
   return Response.json({
-    html: rendered,
+    html: safeHtml,
     unresolvedTokens: hasUnresolvedTokens(safeHtml),
   });
 }
