@@ -39,7 +39,6 @@ function localPart(address: string): string {
  */
 async function resolveForwardDestinations(
   toAddresses: string[],
-  senderEmail: string,
 ): Promise<string[]> {
   const rules = await RoutingRule.find({ active: true }).lean();
 
@@ -71,9 +70,8 @@ async function resolveForwardDestinations(
       .forEach((d) => destinations.add(d));
   }
 
-  // Loop protection: never forward back to the sender, never forward into
-  // our own receiving domain (would re-enter the webhook and loop forever).
-  destinations.delete(senderEmail.trim().toLowerCase());
+  // Loop protection: never forward into our own receiving domain, which
+  // would re-enter the webhook and loop forever.
   for (const dest of [...destinations]) {
     if (dest.endsWith(`@${site.mailDomain}`)) {
       destinations.delete(dest);
@@ -215,7 +213,7 @@ export async function processInboundEmail(eventData: InboundEventData) {
   // --- Forwarding (fail-open: persistence already succeeded)
   let forwarded: string[] = [];
   try {
-    const destinations = await resolveForwardDestinations(recipients, sender.email);
+    const destinations = await resolveForwardDestinations(recipients);
     if (destinations.length > 0) {
       const { error: forwardError } = await resend.emails.receiving.forward({
         emailId,
